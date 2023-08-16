@@ -1,0 +1,32 @@
+<?xml version ="1.0" encoding ="utf-8"?><!--  Learn More about how to use App Actions: https://developer.android.com/guide/actions/index.html -->
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@+id/mainFragment">
+
+    <fragment
+        android:id="@+id/ddayFragment"
+        android:name="com.chanho.loveday.DDayFragment"
+        android:label="ddayFragment"
+        tools:layout="@layout/fragment_d_day" />
+
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.chanho.loveday.MainFragment"
+        android:label="mainFragment"
+        tools:layout="@layout/fragment_main" />
+
+    <fragment
+        android:id="@+id/calendarFragment"
+        android:name="com.chanho.loveday.CalendarFragment"
+        android:label="calendarFragment"
+        tools:layout="@layout/fragment_calendar" />
+
+    <fragment
+        android:id="@+id/memoFragment"
+        android:name="com.chanho.loveday.MemoFragment"
+        android:label="memoFragment"
+        tools:layout="@layout/fragment_memo" />
+
+</navigation>

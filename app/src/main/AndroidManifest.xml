@@ -9,6 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.LoveDay">
+        <meta-data
+            android:name="com.google.android.actions"
+            android:resource="@navigation/nav_graph" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
