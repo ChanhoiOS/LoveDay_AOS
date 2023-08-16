@@ -5,10 +5,24 @@
     android:layout_height="match_parent"
     tools:context=".MainFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+    <ImageButton
+        android:id="@+id/leftButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="12dp"
+        android:src="@drawable/main_photo_btn"
+        android:background="?android:attr/selectableItemBackground"
+        android:layout_gravity="start" />
+
+    <ImageButton
+        android:id="@+id/rightButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="12dp"
+        android:src="@drawable/main_setting_btn"
+        android:background="?android:attr/selectableItemBackground"
+        android:layout_gravity="end" />
 
 </FrameLayout>
