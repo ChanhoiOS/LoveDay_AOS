@@ -1,10 +1,12 @@
 package com.chanho.loveday
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -33,8 +35,20 @@ class MainFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_main, container, false)
+        val view = inflater.inflate(R.layout.fragment_main, container, false)
+
+        val leftButton = view.findViewById<ImageButton>(R.id.leftButton)
+        val rightButton = view.findViewById<ImageButton>(R.id.rightButton)
+
+        leftButton.setOnClickListener {
+            Log.v("test log", "왼쪽 로그")
+        }
+
+        rightButton.setOnClickListener {
+            Log.v("test log", "오른쪽 로그")
+        }
+
+        return view
     }
 
     companion object {
