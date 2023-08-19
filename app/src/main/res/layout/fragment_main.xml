@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/pink"
     tools:context=".MainFragment">
 
     <ImageButton
@@ -29,10 +30,16 @@
         android:id="@+id/mainImage"
         android:layout_width="152dp"
         android:layout_height="121dp"
-        android:layout_marginTop="200dp"
+        android:layout_marginTop="153dp"
         android:layout_gravity="center_horizontal"
         android:src="@drawable/main_calendar"/>
 
-    
+    <View
+        android:id="@+id/main_round_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="477dp"
+        android:layout_below="@+id/toolbar"
+        android:background="@drawable/main_background_roundview"/>
 
 </FrameLayout>
