@@ -1,5 +1,6 @@
 package com.chanho.loveday
 
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
@@ -36,9 +37,11 @@ class MainActivity : AppCompatActivity() {
         val isSet = preferences?.getBoolean("isSet", false)
 
         if (isSet == true) {
-            Log.d("pre:: ", isSet.toString())
+            Log.d("pre1:: ", isSet.toString())
         } else {
-            Log.d("pre:: ", isSet.toString())
+            Log.d("pre2:: ", isSet.toString())
+            val intent = Intent(this, SetDayActivity::class.java)
+            startActivity(intent)
         }
 
 //        val editor  : SharedPreferences.Editor? = preferences?.edit();
