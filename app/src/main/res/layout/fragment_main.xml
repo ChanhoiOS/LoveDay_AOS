@@ -49,21 +49,21 @@
         android:layout_marginTop="427dp"
         android:background="@android:color/transparent">
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/main_boy_Image"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_toStartOf="@id/main_heart_Image"
             android:layout_marginEnd="20dp"
             android:layout_centerVertical="true"
-            android:src="@drawable/main_calendar" />
+            android:src="@drawable/main_boy" />
 
         <ImageView
             android:id="@+id/main_heart_Image"
             android:layout_width="30dp"
             android:layout_height="26dp"
             android:layout_centerInParent="true"
-            android:src="@drawable/main_calendar" />
+            android:src="@drawable/main_heart_middle" />
 
         <ImageView
             android:id="@+id/main_girl_Image"
@@ -71,7 +71,7 @@
             android:layout_height="100dp"
             android:layout_toEndOf="@id/main_heart_Image"
             android:layout_marginStart="20dp"
-            android:src="@drawable/main_calendar" />
+            android:src="@drawable/main_girl" />
 
 
     </RelativeLayout>
