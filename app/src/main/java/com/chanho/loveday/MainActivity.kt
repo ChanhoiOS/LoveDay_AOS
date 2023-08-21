@@ -1,20 +1,24 @@
 package com.chanho.loveday
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.SharedPreferences
 import android.os.Bundle
-import androidx.navigation.Navigation.findNavController
+import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.chanho.loveday.databinding.ActivityMainBinding
 
+
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private var preferences: SharedPreferences? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         initBinding()
         initNavigation()
+        initSharedPreference()
     }
 
     private fun initBinding() {
@@ -24,5 +28,21 @@ class MainActivity : AppCompatActivity() {
 
     private fun initNavigation() {
         NavigationUI.setupWithNavController(binding.navBar, findNavController(R.id.nav_host))
+    }
+
+    private fun initSharedPreference() {
+        preferences = getSharedPreferences("setDDay", MODE_PRIVATE);
+
+        val isSet = preferences?.getBoolean("isSet", false)
+
+        if (isSet == true) {
+            Log.d("pre:: ", isSet.toString())
+        } else {
+            Log.d("pre:: ", isSet.toString())
+        }
+
+//        val editor  : SharedPreferences.Editor? = preferences?.edit();
+//        editor?.putString("hello","안녕하세요")
+//        editor?.commit() // data 저장!
     }
 }
