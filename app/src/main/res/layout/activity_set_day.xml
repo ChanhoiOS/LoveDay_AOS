@@ -1,42 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".SetDayActivity">
 
+    <!-- Title -->
     <TextView
         android:id="@+id/titleTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="73dp"
+        android:layout_marginTop="40dp"
         android:fontFamily="@font/pretendard_bold"
         android:text="두분의 사귀신 날짜를\n선택해주세요!"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <CalendarView
-        android:id="@+id/calendarView"
-        android:layout_width="0dp"
+    <com.applikeysolutions.cosmocalendar.view.CalendarView
+        android:id="@+id/calendar_view"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="60dp"
-        android:layout_marginBottom="160dp"
-        app:cv_hasBoundaries="false"
-        app:cv_inDateStyle="none"
-        app:cv_maxRowCount="1"
-        app:cv_orientation="horizontal"
-        app:cv_outDateStyle="none"
-        app:cv_scrollMode="paged"
-        app:layout_constraintBottom_toTopOf="@+id/bottomButton"
+        app:connectedDayIconPosition="top"
+        app:currentDayTextColor="#f79256"
+        app:firstDayOfTheWeek="sunday"
+        app:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/bottomButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titleTextView"
-        app:layout_constraintVertical_chainStyle="packed" />
+        app:layout_constraintVertical_chainStyle="packed"
+        app:selectedDayBackgroundColor="#FFEACA"
+        app:selectedDayBackgroundEndColor="#f79256"
+        app:selectedDayBackgroundStartColor="#f79256"
+        app:selectedDayTextColor="#FFFFFF"
+        app:selectionType="range"
+        app:weekendDayTextColor="#ef4550"
+        android:layout_marginBottom="160dp"
+        />
 
+    <!-- 확인 Btn -->
     <Button
         android:id="@+id/bottomButton"
         android:layout_width="0dp"

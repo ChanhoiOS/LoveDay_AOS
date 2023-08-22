@@ -7,5 +7,8 @@ class SetDayActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_set_day)
+
+//        val calendarView = findViewById<CalendarView>(R.id.calendarView)
+//        calendarView.dayBinder = DayViewContainer(calendarView)
     }
 }
