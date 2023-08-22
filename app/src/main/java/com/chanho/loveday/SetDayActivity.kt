@@ -1,5 +1,6 @@
 package com.chanho.loveday
 
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -14,7 +15,8 @@ import java.util.concurrent.TimeUnit
 class SetDayActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySetDayBinding
-    val today = Calendar.getInstance()
+
+    private var preferences: SharedPreferences? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +29,8 @@ class SetDayActivity : AppCompatActivity() {
             val day = binding.calendarView.selectedDays[0].dayNumber
 
             val formattedDate = String.format("%04d-%02d-%02d", year, month, day)
+
+            preferences = getSharedPreferences("setDDay", MODE_PRIVATE);
 
             getDDay(year, month, day)
             getSpecialInfo(formattedDate)
@@ -125,13 +129,16 @@ class SetDayActivity : AppCompatActivity() {
         // 저장 로직을 여기에 구현
         Log.d("specialDate:: ", specialDate.toString())
         Log.d("specialDayName:: ", specialDayName.toString())
+        val getKey = preferences?.getString("privateKey", "") ?: ""
+
+        println("getKey: $getKey")
 
         for (i in specialDate.indices) {
             val param = HashMap<String, Any>()
             param["specialDate"] = specialDate[i]
             param["content"] = specialDayName[i]
-            param["writer"] = "test"
-            saveCalendar(param)
+            param["writer"] = getKey
+           // saveCalendar(param)
         }
     }
 

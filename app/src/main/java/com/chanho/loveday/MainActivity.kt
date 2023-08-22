@@ -20,6 +20,7 @@ class MainActivity : AppCompatActivity() {
         initBinding()
         initNavigation()
         initSharedPreference()
+        initPrivateKey()
     }
 
     private fun initBinding() {
@@ -40,6 +41,7 @@ class MainActivity : AppCompatActivity() {
             Log.d("pre1:: ", isSet.toString())
         } else {
             Log.d("pre2:: ", isSet.toString())
+
             val intent = Intent(this, SetDayActivity::class.java)
             startActivity(intent)
         }
@@ -48,4 +50,27 @@ class MainActivity : AppCompatActivity() {
 //        editor?.putString("hello","안녕하세요")
 //        editor?.commit() // data 저장!
     }
+
+    private fun initPrivateKey() {
+        val getKey = preferences?.getString("privateKey", "")
+        val keyEditor: SharedPreferences.Editor? = preferences?.edit()
+
+        if (getKey == "") {
+            val randomString = generateRandomString(6)
+            keyEditor?.putString("privateKey", randomString)
+            keyEditor?.commit()
+            println("nothing::: $randomString")
+        } else {
+            println("Random String: $getKey")
+        }
+    }
+
+    fun generateRandomString(length: Int): String {
+        val charPool = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+        val randomString = (1..length)
+            .map { charPool.random() }
+            .joinToString("")
+        return randomString
+    }
+
 }
