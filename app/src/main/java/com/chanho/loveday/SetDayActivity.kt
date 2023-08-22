@@ -125,6 +125,25 @@ class SetDayActivity : AppCompatActivity() {
         // 저장 로직을 여기에 구현
         Log.d("specialDate:: ", specialDate.toString())
         Log.d("specialDayName:: ", specialDayName.toString())
+
+        for (i in specialDate.indices) {
+            val param = HashMap<String, Any>()
+            param["specialDate"] = specialDate[i]
+            param["content"] = specialDayName[i]
+            param["writer"] = "test"
+            saveCalendar(param)
+        }
+    }
+
+    fun saveCalendar(data: HashMap<String, Any>) {
+        val url = "http://52.78.124.184:8080/api/calendar"
+        NetworkManager.postRequest(data,
+            {
+                // 성공 처리 로직을 여기에 작성합니다.
+            },
+            {
+                // 실패 처리 로직을 여기에 작성합니다.
+            })
     }
 }
 
