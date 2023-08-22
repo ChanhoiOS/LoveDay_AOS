@@ -35,6 +35,14 @@ class SetDayActivity : AppCompatActivity() {
             getDDay(year, month, day)
             getSpecialInfo(formattedDate)
         })
+
+        binding.bottomButton.setOnClickListener {
+            setSpecialDay()
+        }
+    }
+
+    fun setSpecialDay() {
+        println("click")
     }
 
     fun getDDay(year: Int, month: Int, day: Int) {
