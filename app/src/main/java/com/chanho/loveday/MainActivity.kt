@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity() {
         println("privateKey: $getKey")
     }
 
-    fun generateRandomString(length: Int): String {
+    private fun generateRandomString(length: Int): String {
         val charPool = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
         val randomString = (1..length)
             .map { charPool.random() }
