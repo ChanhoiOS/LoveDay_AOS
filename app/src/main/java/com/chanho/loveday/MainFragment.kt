@@ -43,8 +43,6 @@ class MainFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_main, container, false)
 
-
-
         eventProfileBtn(view)
         eventSettingBtn(view)
 
