@@ -1,5 +1,6 @@
 package com.chanho.loveday
 
+import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
@@ -8,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
 // TODO: Rename parameter arguments, choose names that match
@@ -41,19 +43,39 @@ class MainFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_main, container, false)
 
+
+
+        eventProfileBtn(view)
+        eventSettingBtn(view)
+
+        setIngday(view)
+
+        return view
+    }
+
+    private fun setIngday(view: View) {
+        preferences = requireActivity().getSharedPreferences("setDDay", Context.MODE_PRIVATE)
+        val ingDay = preferences?.getLong("ingDay", 0)
+        val ingText = view.findViewById<TextView>(R.id.ingText)
+        ingText.text = ingDay.toString() + "일째"
+    }
+
+    private fun eventProfileBtn(view: View) {
         val leftButton = view.findViewById<ImageButton>(R.id.leftButton)
-        val rightButton = view.findViewById<ImageButton>(R.id.rightButton)
 
         leftButton.setOnClickListener {
             Log.v("test log", "왼쪽 로그")
         }
+    }
+
+    private fun eventSettingBtn(view: View) {
+        val rightButton = view.findViewById<ImageButton>(R.id.rightButton)
 
         rightButton.setOnClickListener {
             Log.v("test log", "오른쪽 로그")
         }
-
-        return view
     }
+
     companion object {
         /**
          * Use this factory method to create a new instance of
