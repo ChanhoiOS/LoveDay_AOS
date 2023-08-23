@@ -10,7 +10,7 @@
         <entry key="app/src/main/res/layout/activity_set_day.xml" value="0.25" />
         <entry key="app/src/main/res/layout/calendar_day_layout.xml" value="0.505" />
         <entry key="app/src/main/res/layout/fragment_calendar.xml" value="0.18489583333333334" />
-        <entry key="app/src/main/res/layout/fragment_d_day.xml" value="0.17083333333333334" />
+        <entry key="app/src/main/res/layout/fragment_d_day.xml" value="0.30217336018880214" />
         <entry key="app/src/main/res/layout/fragment_main.xml" value="0.12994384765625" />
         <entry key="app/src/main/res/layout/fragment_memo.xml" value="0.18489583333333334" />
         <entry key="app/src/main/res/layout/setday_textview.xml" value="0.505" />
