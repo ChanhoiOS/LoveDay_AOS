@@ -37,13 +37,15 @@ class MainActivity : AppCompatActivity() {
 
         val isSet = preferences?.getBoolean("isSet", false)
 
-        if (isSet == true) {
-            Log.d("pre1:: ", isSet.toString())
-        } else {
-            Log.d("pre2:: ", isSet.toString())
+        if (isSet == false) {
             val intent = Intent(this, SetDayActivity::class.java)
             startActivity(intent)
         }
+
+        val startDay = preferences?.getString("datingDay", "")
+        println("startDay: $startDay")
+        val ingDay = preferences?.getLong("ingDay", 0)
+        println("ingDay: $ingDay")
     }
 
     private fun initPrivateKey() {
