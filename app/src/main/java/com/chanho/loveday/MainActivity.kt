@@ -3,7 +3,9 @@ package com.chanho.loveday
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
+import androidx.activity.result.ActivityResultCallback
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
@@ -40,12 +42,8 @@ class MainActivity : AppCompatActivity() {
         if (isSet == false) {
             val intent = Intent(this, SetDayActivity::class.java)
             startActivity(intent)
+            finish()
         }
-
-        val startDay = preferences?.getString("datingDay", "")
-        println("startDay: $startDay")
-        val ingDay = preferences?.getLong("ingDay", 0)
-        println("ingDay: $ingDay")
     }
 
     private fun initPrivateKey() {
@@ -56,10 +54,9 @@ class MainActivity : AppCompatActivity() {
             val randomString = generateRandomString(6)
             keyEditor?.putString("privateKey", randomString)
             keyEditor?.commit()
-            println("nothing::: $randomString")
-        } else {
-            println("Random String: $getKey")
         }
+
+        println("privateKey: $getKey")
     }
 
     fun generateRandomString(length: Int): String {
@@ -69,5 +66,4 @@ class MainActivity : AppCompatActivity() {
             .joinToString("")
         return randomString
     }
-
 }

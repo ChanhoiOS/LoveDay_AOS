@@ -1,5 +1,6 @@
 package com.chanho.loveday
 
+import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -161,7 +162,7 @@ class SetDayActivity : AppCompatActivity() {
             param["specialDate"] = specialDate[i]
             param["content"] = specialDayName[i]
             param["writer"] = getKey
-           // saveCalendar(param)
+            saveCalendar(param)
         }
     }
 
@@ -169,7 +170,9 @@ class SetDayActivity : AppCompatActivity() {
         val url = "http://52.78.124.184:8080/api/calendar"
         NetworkManager.postRequest(data,
             {
-                // 성공 처리 로직을 여기에 작성합니다.
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+                finish()
             },
             {
                 // 실패 처리 로직을 여기에 작성합니다.
