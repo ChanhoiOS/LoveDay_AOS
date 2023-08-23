@@ -41,14 +41,9 @@ class MainActivity : AppCompatActivity() {
             Log.d("pre1:: ", isSet.toString())
         } else {
             Log.d("pre2:: ", isSet.toString())
-
             val intent = Intent(this, SetDayActivity::class.java)
             startActivity(intent)
         }
-
-//        val editor  : SharedPreferences.Editor? = preferences?.edit();
-//        editor?.putString("hello","안녕하세요")
-//        editor?.commit() // data 저장!
     }
 
     private fun initPrivateKey() {

@@ -18,22 +18,28 @@ class SetDayActivity : AppCompatActivity() {
 
     private var preferences: SharedPreferences? = null
 
+    var datingDay = ""
+    var selectedYear = 2023
+    var selectedMonth = 1
+    var selectedDay = 1
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySetDayBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        preferences = getSharedPreferences("setDDay", MODE_PRIVATE);
+
         binding.calendarView.selectionManager = SingleSelectionManager(OnDaySelectedListener {
             val year = binding.calendarView.selectedDays[0].calendar.weekYear
+            selectedYear = year
             val month = binding.calendarView.selectedDays[0].calendar[2] + 1
+            selectedMonth = month
             val day = binding.calendarView.selectedDays[0].dayNumber
+            selectedDay = day
 
             val formattedDate = String.format("%04d-%02d-%02d", year, month, day)
-
-            preferences = getSharedPreferences("setDDay", MODE_PRIVATE);
-
-            getDDay(year, month, day)
-            getSpecialInfo(formattedDate)
+            datingDay = formattedDate
         })
 
         binding.bottomButton.setOnClickListener {
@@ -42,7 +48,12 @@ class SetDayActivity : AppCompatActivity() {
     }
 
     fun setSpecialDay() {
-        println("click")
+        val setEditor: SharedPreferences.Editor? = preferences?.edit()
+        setEditor?.putBoolean("isSet", true)
+        setEditor?.commit()
+
+        getDDay(selectedYear, selectedMonth, selectedMonth)
+        getSpecialInfo(datingDay)
     }
 
     fun getDDay(year: Int, month: Int, day: Int) {
