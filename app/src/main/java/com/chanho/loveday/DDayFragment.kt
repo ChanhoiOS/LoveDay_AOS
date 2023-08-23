@@ -7,9 +7,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.chanho.loveday.adapter.WpResidencePickerAdapter
 import com.chanho.loveday.databinding.FragmentDDayBinding
+import com.super_rabbit.wheel_picker.OnValueChangeListener
+import com.super_rabbit.wheel_picker.WheelPicker
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -47,6 +51,7 @@ class DDayFragment : Fragment() {
         val datingDay = preferences?.getString("datingDay", "")
 
         getSpecialDDayInfo(datingDay)
+
 
         return binding.root
     }
@@ -114,8 +119,39 @@ class DDayFragment : Fragment() {
         }
 
         println("specialDDayCheck:: $specialDDayCheck")
+
+        val specialDates = specialDDayCheck.map { it.keys.first() }
+        val specialDatesArrayList: ArrayList<String> = ArrayList(specialDates)
+        setPicker(specialDatesArrayList)
+        println("specialDates:: $specialDates")
     }
 
+    fun setPicker(specialDates: ArrayList<String>) {
+        binding.wpPicker.apply {
+            // Set rounded wrap enable
+            setSelectorRoundedWrapPreferred(true)
+            // Set wheel item count
+//            setWheelItemCount(10)
+            // Set wheel max index
+            setMax(0)
+            // Set wheel min index
+            setMin(16)
+            // Set selected text color
+            setSelectedTextColor(R.color.black)
+            // Set unselected text color
+            setUnselectedTextColor(R.color.pink)
+            // Set user defined adapter
+            setAdapter(WpResidencePickerAdapter(specialDates))
+
+            // OnValueChangeListener
+            setOnValueChangeListener(object : OnValueChangeListener {
+                override fun onValueChange(picker: WheelPicker, oldVal: String, newVal: String) {
+//                    val out = "Current: ${picker.getCurrentItem()} / ResidenceArr.indexOf(binding.wpPicker.getCurrentItem()): ${ResidenceArr.indexOf(binding.wpPicker.getCurrentItem()) + 1}"
+//                    Utils.toastMsg(out)
+                }
+            })
+        }
+    }
 
     companion object {
         /**
