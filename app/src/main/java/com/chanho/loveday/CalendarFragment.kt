@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.chanho.loveday.databinding.FragmentCalendarBinding
 import com.chanho.loveday.databinding.FragmentDDayBinding
+import com.chanho.loveday.model.CalendarModel
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.DayViewDecorator
 import com.prolificinteractive.materialcalendarview.DayViewFacade
@@ -50,11 +51,11 @@ class CalendarFragment : Fragment() {
         setData()
 
 
-        binding.calendarManageView
-        .addDecorator(
-            EventDecorator(
-                Color.parseColor("#0E406B"),
-                Collections.singleton(CalendarDay.from(2023, 8, 11))))
+//        binding.calendarManageView
+//        .addDecorator(
+//            EventDecorator(
+//                Color.parseColor("#0E406B"),
+//                Collections.singleton(CalendarDay.from(2023, 8, 11))))
 
         return binding.root
     }
@@ -68,12 +69,38 @@ class CalendarFragment : Fragment() {
     private fun fetchData(param: HashMap<String, Any>) {
         NetworkManager.getCalendar(param, { data ->
             if (data != null) {
-                // 가져온 데이터(data)를 처리
+                addSpecialDateDecorators(data)
             } else {
                 // 데이터 가져오기 실패
             }
         })
     }
+
+    fun addSpecialDateDecorators(calendarModels: List<CalendarModel>) {
+        val specialDates = extractSpecialDates(calendarModels)
+        val eventDecorator = EventDecorator(Color.parseColor("#0E406B"), specialDates)
+        binding.calendarManageView.addDecorator(eventDecorator)
+    }
+
+    fun extractSpecialDates(calendarModels: List<CalendarModel>): Set<CalendarDay> {
+        val specialDates = mutableSetOf<CalendarDay>()
+
+        for (model in calendarModels) {
+            val specialDate = model.specialDate
+            if (specialDate != null) {
+                val dateParts = specialDate.split("-")
+                if (dateParts.size == 3) {
+                    val year = dateParts[0].toInt()
+                    val month = dateParts[1].toInt()
+                    val day = dateParts[2].toInt()
+                    specialDates.add(CalendarDay.from(year, month, day))
+                }
+            }
+        }
+
+        return specialDates
+    }
+
 
     companion object {
         /**
