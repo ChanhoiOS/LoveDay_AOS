@@ -49,14 +49,7 @@ class CalendarFragment : Fragment() {
         binding = FragmentCalendarBinding.inflate(inflater, container, false )
 
         setData()
-
-
-//        binding.calendarManageView
-//        .addDecorator(
-//            EventDecorator(
-//                Color.parseColor("#0E406B"),
-//                Collections.singleton(CalendarDay.from(2023, 8, 11))))
-
+        
         return binding.root
     }
 
