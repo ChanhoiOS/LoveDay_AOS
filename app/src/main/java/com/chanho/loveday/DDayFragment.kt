@@ -122,11 +122,11 @@ class DDayFragment : Fragment() {
 
         val specialDates = specialDDayCheck.map { it.keys.first() }
         val specialDatesArrayList: ArrayList<String> = ArrayList(specialDates)
-        setPicker(specialDatesArrayList)
+        setPicker(specialDatesArrayList, specialDDayCheck)
         println("specialDates:: $specialDates")
     }
 
-    fun setPicker(specialDates: ArrayList<String>) {
+    fun setPicker(specialDates: ArrayList<String>, specialDDayCheck: MutableList<Map<String, Int>>) {
         binding.wpPicker.apply {
             // Set rounded wrap enable
             setSelectorRoundedWrapPreferred(true)
@@ -146,8 +146,15 @@ class DDayFragment : Fragment() {
             // OnValueChangeListener
             setOnValueChangeListener(object : OnValueChangeListener {
                 override fun onValueChange(picker: WheelPicker, oldVal: String, newVal: String) {
-//                    val out = "Current: ${picker.getCurrentItem()} / ResidenceArr.indexOf(binding.wpPicker.getCurrentItem()): ${ResidenceArr.indexOf(binding.wpPicker.getCurrentItem()) + 1}"
-//                    Utils.toastMsg(out)
+                    val out = "Current: ${picker.getCurrentItem()}"
+                    println("out:: $out")
+                    val index = specialDates.indexOf(binding.wpPicker.getCurrentItem())
+                    val value = specialDDayCheck[index].values.first()
+                    if (value == 0) {
+                        binding.ddayDatingDay.text = "만난 날"
+                    } else {
+                        binding.ddayDatingDay.text = value.toString()
+                    }
                 }
             })
         }
