@@ -1,10 +1,19 @@
 package com.chanho.loveday
 
+import android.graphics.Color
 import android.os.Bundle
+import android.text.style.ForegroundColorSpan
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.chanho.loveday.databinding.FragmentCalendarBinding
+import com.chanho.loveday.databinding.FragmentDDayBinding
+import com.prolificinteractive.materialcalendarview.CalendarDay
+import com.prolificinteractive.materialcalendarview.DayViewDecorator
+import com.prolificinteractive.materialcalendarview.DayViewFacade
+import com.prolificinteractive.materialcalendarview.spans.DotSpan
+import java.util.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -21,6 +30,8 @@ class CalendarFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    private lateinit var binding: FragmentCalendarBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -34,7 +45,15 @@ class CalendarFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_calendar, container, false)
+        binding = FragmentCalendarBinding.inflate(inflater, container, false )
+
+        binding.calendarManageView
+        .addDecorator(
+            EventDecorator(
+                Color.parseColor("#0E406B"),
+                Collections.singleton(CalendarDay.from(2023, 8, 11))))
+
+        return binding.root
     }
 
     companion object {
@@ -55,5 +74,39 @@ class CalendarFragment : Fragment() {
                     putString(ARG_PARAM2, param2)
                 }
             }
+    }
+}
+
+class SaturdayDecorator : DayViewDecorator {
+
+    private val calendar = Calendar.getInstance()
+
+    override fun shouldDecorate(day: CalendarDay): Boolean {
+//        day.copyTo(calendar)
+        val weekDay: Int = calendar.get(Calendar.DAY_OF_WEEK)
+        return weekDay == Calendar.SATURDAY
+    }
+
+    override fun decorate(view: DayViewFacade) {
+        view.addSpan(ForegroundColorSpan(Color.parseColor("#87CEFA")))
+    }
+}
+
+class EventDecorator() : DayViewDecorator {
+
+    private var color = 0
+    private lateinit var dates : HashSet<CalendarDay>
+
+    constructor(color: Int, dates: Collection<CalendarDay>) : this() {
+        this.color=color
+        this.dates=HashSet(dates)
+    }
+
+    override fun shouldDecorate(day: CalendarDay?): Boolean {
+        return dates.contains(day)
+    }
+
+    override fun decorate(view: DayViewFacade?) {
+        view?.addSpan(DotSpan(10F, color))
     }
 }

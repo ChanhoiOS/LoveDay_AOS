@@ -42,7 +42,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/calendarKeyButton" />
 
-    <com.applikeysolutions.cosmocalendar.view.CalendarView
+    <com.prolificinteractive.materialcalendarview.MaterialCalendarView
         android:id="@+id/calendar_manage_view"
         android:layout_width="match_parent"
         android:layout_height="390dp"
@@ -62,7 +62,28 @@
         app:selectedDayTextColor="#FFFFFF"
         app:selectionType="single"
         app:weekendDayTextColor="#ef4550"
-        />
+    />
+<!--    <com.applikeysolutions.cosmocalendar.view.CalendarView-->
+<!--        android:id="@+id/calendar_manage_view"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="390dp"-->
+<!--        android:layout_marginTop="16dp"-->
+<!--        app:connectedDayIconPosition="top"-->
+<!--        app:currentDayTextColor="#f79256"-->
+<!--        app:firstDayOfTheWeek="sunday"-->
+<!--        app:orientation="horizontal"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/calendarTitleText"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/calendar_info_view"-->
+<!--        app:layout_constraintVertical_chainStyle="packed"-->
+<!--        app:selectedDayBackgroundColor="#FFEACA"-->
+<!--        app:selectedDayBackgroundEndColor="#f79256"-->
+<!--        app:selectedDayBackgroundStartColor="#f79256"-->
+<!--        app:selectedDayTextColor="#FFFFFF"-->
+<!--        app:selectionType="single"-->
+<!--        app:weekendDayTextColor="#ef4550"-->
+<!--        />-->
 
     <View
         android:id="@+id/calendar_info_view"
