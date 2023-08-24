@@ -47,6 +47,9 @@ class CalendarFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentCalendarBinding.inflate(inflater, container, false )
 
+        setData()
+
+
         binding.calendarManageView
         .addDecorator(
             EventDecorator(
@@ -54,6 +57,22 @@ class CalendarFragment : Fragment() {
                 Collections.singleton(CalendarDay.from(2023, 8, 11))))
 
         return binding.root
+    }
+
+    private fun setData() {
+        val param = HashMap<String, Any>()
+        param["writer"] = "inbwvv"
+        fetchData(param)
+    }
+
+    private fun fetchData(param: HashMap<String, Any>) {
+        NetworkManager.getCalendar(param, { data ->
+            if (data != null) {
+                // 가져온 데이터(data)를 처리
+            } else {
+                // 데이터 가져오기 실패
+            }
+        })
     }
 
     companion object {
