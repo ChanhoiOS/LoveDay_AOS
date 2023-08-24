@@ -10,9 +10,7 @@ import android.view.ViewGroup
 import com.chanho.loveday.databinding.FragmentCalendarBinding
 import com.chanho.loveday.databinding.FragmentDDayBinding
 import com.chanho.loveday.model.CalendarModel
-import com.prolificinteractive.materialcalendarview.CalendarDay
-import com.prolificinteractive.materialcalendarview.DayViewDecorator
-import com.prolificinteractive.materialcalendarview.DayViewFacade
+import com.prolificinteractive.materialcalendarview.*
 import com.prolificinteractive.materialcalendarview.spans.DotSpan
 import java.util.*
 
@@ -32,6 +30,7 @@ class CalendarFragment : Fragment() {
     private var param2: String? = null
 
     private lateinit var binding: FragmentCalendarBinding
+    private var calendarModelData: List<CalendarModel>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,8 +47,37 @@ class CalendarFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentCalendarBinding.inflate(inflater, container, false )
 
+        binding.calendarManageView.setOnDateChangedListener(object : OnDateSelectedListener {
+            override fun onDateSelected(widget: MaterialCalendarView, date: CalendarDay, selected: Boolean) {
+                // 날짜 클릭 이벤트 처리
+                if (selected) {
+
+                    val year = date.year.toString()
+
+                    val month = if (date.month < 10) {
+                        "0${date.month}"
+                    } else {
+                        date.month.toString()
+                    }
+
+                    val day = if (date.day < 10) {
+                        "0${date.day}"
+                    } else {
+                        date.day.toString()
+                    }
+
+                    var selectedDate = "$year-$month-$day"
+
+                    val contentForTargetDate = calendarModelData?.find { calendarModel ->
+                        calendarModel.specialDate == selectedDate
+                    }?.content
+            println("contentForTargetDate: $contentForTargetDate")
+                }
+            }
+        })
+
         setData()
-        
+
         return binding.root
     }
 
@@ -62,6 +90,7 @@ class CalendarFragment : Fragment() {
     private fun fetchData(param: HashMap<String, Any>) {
         NetworkManager.getCalendar(param, { data ->
             if (data != null) {
+                calendarModelData = data
                 addSpecialDateDecorators(data)
             } else {
                 // 데이터 가져오기 실패
