@@ -9,7 +9,7 @@
     android:padding="16dp">
 
     <TextView
-        android:id="@+id/memoTypeTitle"
+        android:id="@+id/memoWriteTitleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="새로운 메모 작성하기"
@@ -19,14 +19,14 @@
         android:layout_marginBottom="16dp"/>
 
     <Button
-        android:id="@+id/closeBtn"
+        android:id="@+id/memoWriteCloseBtn"
         android:layout_width="18dp"
         android:layout_height="12dp"
         android:layout_gravity="end"
         android:background="@drawable/ic_triangle_white" />
 
     <EditText
-        android:id="@+id/memoTitle"
+        android:id="@+id/memoWriteTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="메모 제목 입력(10글자 제한)"
@@ -34,14 +34,14 @@
         android:layout_marginTop="16dp"/>
 
     <EditText
-        android:id="@+id/memoContent"
+        android:id="@+id/memoWriteContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="메모 내용 입력"
         android:layout_marginTop="8dp"/>
 
     <Button
-        android:id="@+id/confirmBtn"
+        android:id="@+id/memoConfirmBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="확인"
