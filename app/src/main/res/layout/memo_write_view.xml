@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/memoTypeTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="새로운 메모 작성하기"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_gravity="start"
+        android:layout_marginBottom="16dp"/>
+
+    <Button
+        android:id="@+id/closeBtn"
+        android:layout_width="18dp"
+        android:layout_height="12dp"
+        android:layout_gravity="end"
+        android:background="@drawable/ic_triangle_white" />
+
+    <EditText
+        android:id="@+id/memoTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="메모 제목 입력(10글자 제한)"
+        android:maxLines="1"
+        android:layout_marginTop="16dp"/>
+
+    <EditText
+        android:id="@+id/memoContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="메모 내용 입력"
+        android:layout_marginTop="8dp"/>
+
+    <Button
+        android:id="@+id/confirmBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="확인"
+        android:textSize="18sp"
+        android:layout_marginTop="16dp"/>
+
+</LinearLayout>

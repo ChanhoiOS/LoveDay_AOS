@@ -47,6 +47,14 @@ class MemoFragment : Fragment() {
 
         setData()
 
+        binding.memoRegisterButton.setOnClickListener {
+            val memoTakeDialog = MemoWriteFragment()
+            memoTakeDialog.show(requireActivity().supportFragmentManager, "memo_take_dialog")
+        }
+
+
+
+
         return binding.root
     }
 
