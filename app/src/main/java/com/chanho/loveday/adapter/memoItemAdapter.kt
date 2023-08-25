@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.chanho.loveday.R
 import com.chanho.loveday.model.MemoModel
 
-class MemoItemAdapter(val memoList: List<MemoModel>): RecyclerView.Adapter<MemoItemAdapter.GridAdapter>() {
+class MemoItemAdapter(val memoList: List<MemoModel>?): RecyclerView.Adapter<MemoItemAdapter.GridAdapter>() {
 
     class GridAdapter(val layout: View): RecyclerView.ViewHolder(layout) {
         var title = layout.findViewById<TextView>(R.id.momoGridTitleText)
@@ -23,11 +23,11 @@ class MemoItemAdapter(val memoList: List<MemoModel>): RecyclerView.Adapter<MemoI
     }
 
     override fun onBindViewHolder(holder: GridAdapter, position: Int) {
-       holder.title.text = memoList.get(position).title
-        holder.content.text = memoList.get(position).content
+       holder.title.text = memoList?.get(position)?.title
+        holder.content.text = memoList?.get(position)?.content
     }
 
     override fun getItemCount(): Int {
-        return memoList.size
+        return memoList?.size ?: 0
     }
 }

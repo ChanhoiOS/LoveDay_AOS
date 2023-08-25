@@ -8,7 +8,9 @@ import android.view.ViewGroup
 import com.chanho.loveday.adapter.MemoItemAdapter
 import com.chanho.loveday.databinding.FragmentDDayBinding
 import com.chanho.loveday.databinding.FragmentMemoBinding
+import com.chanho.loveday.model.CalendarModel
 import com.chanho.loveday.model.MemoModel
+import java.util.HashMap
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -26,6 +28,8 @@ class MemoFragment : Fragment() {
     private var param2: String? = null
 
     private lateinit var binding: FragmentMemoBinding
+    private var memoModelData: List<MemoModel>? = null
+    lateinit var adapter: MemoItemAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,17 +45,29 @@ class MemoFragment : Fragment() {
     ): View? {
         binding = FragmentMemoBinding.inflate(inflater, container, false )
 
-        val memoList = listOf(
-            MemoModel(1, "2", "3", "4"),
-            MemoModel(1, "2", "3", "4"),
-            MemoModel(1, "2", "3", "4"),
-            MemoModel(1, "2", "3", "4")
-        )
-
-        val adapter = MemoItemAdapter(memoList)
-        binding.memoRecyclerView.adapter = adapter
+        setData()
 
         return binding.root
+    }
+
+    private fun setData() {
+        val param = HashMap<String, Any>()
+        param["writer"] = "sI3fpy"
+        fetchData(param)
+    }
+
+    private fun fetchData(param: HashMap<String, Any>) {
+        NetworkManager.getMemo(param) { data ->
+            if (data != null) {
+                memoModelData = data
+                memoModelData?.let {
+                    adapter = MemoItemAdapter(memoModelData)
+                    binding.memoRecyclerView.adapter = adapter
+                }
+            } else {
+                // 데이터 가져오기 실패
+            }
+        }
     }
 
     companion object {

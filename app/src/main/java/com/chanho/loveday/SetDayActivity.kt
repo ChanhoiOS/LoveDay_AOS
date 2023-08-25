@@ -168,7 +168,7 @@ class SetDayActivity : AppCompatActivity() {
 
     fun saveCalendar(data: HashMap<String, Any>) {
         val url = "http://52.78.124.184:8080/api/calendar"
-        NetworkManager.postRequest(data,
+        NetworkManager.postCalendarRequest(data,
             {
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)

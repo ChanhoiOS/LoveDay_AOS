@@ -1,6 +1,7 @@
 package com.chanho.loveday
 
 import com.chanho.loveday.model.CalendarModel
+import com.chanho.loveday.model.MemoModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -35,14 +36,14 @@ object NetworkManager {
         })
     }
 
-    fun postRequest(data: HashMap<String, Any>, success: () -> Unit, failure: () -> Unit) {
+    fun postCalendarRequest(data: HashMap<String, Any>, success: () -> Unit, failure: () -> Unit) {
         apiService.saveCalendar(data).enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if (response.isSuccessful) {
-                    println("Calendar First Save Success")
+                    println("Post Success")
                     success()
                 } else {
-                    println("Calendar First Save Fail")
+                    println("Post Fail")
                     failure()
                 }
             }
@@ -69,6 +70,25 @@ object NetworkManager {
             }
         })
     }
+
+    fun getMemo(params: HashMap<String, Any>, callback: (List<MemoModel>?) -> Unit) {
+        val call: Call<List<MemoModel>> = apiService.getMemo(params)
+
+        call.enqueue(object : Callback<List<MemoModel>> {
+            override fun onResponse(call: Call<List<MemoModel>>, response: Response<List<MemoModel>>) {
+                if (response.isSuccessful) {
+                    val data: List<MemoModel>? = response.body()
+                    callback(data) // 가져온 데이터(data)를 콜백으로 전달
+                } else {
+                    callback(null) // 실패 시 null을 콜백으로 전달
+                }
+            }
+
+            override fun onFailure(call: Call<List<MemoModel>>, t: Throwable) {
+                callback(null) // 실패 시 null을 콜백으로 전달
+            }
+        })
+    }
 }
 
 interface ApiService {
@@ -80,4 +100,7 @@ interface ApiService {
 
     @HTTP(method = "DELETE", path="api/calendar", hasBody = true)
     fun deleteCalendar(@Body params: HashMap<String, Any>): Call<Void>
+
+    @GET("api/memo")
+    fun getMemo(@QueryMap params: HashMap<String, Any>): Call<List<MemoModel>>
 }

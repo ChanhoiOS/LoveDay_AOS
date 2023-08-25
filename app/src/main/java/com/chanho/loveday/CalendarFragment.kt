@@ -182,7 +182,7 @@ class CalendarFragment : Fragment() {
     }
 
     fun postCalendar(data: HashMap<String, Any>) {
-        NetworkManager.postRequest(data,
+        NetworkManager.postCalendarRequest(data,
             {
                 setData()
             },
