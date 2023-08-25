@@ -70,10 +70,11 @@ class CalendarFragment : Fragment() {
                     val contentForTargetDate = calendarModelData?.find { calendarModel ->
                         calendarModel.specialDate == selectedDate
                     }?.content
-            println("contentForTargetDate: $contentForTargetDate")
-
+                    
                     if (contentForTargetDate != null) {
                         showDeleteConfirmationPopup(selectedDate)
+                        binding.calendarDayText.text = selectedDate
+                        binding.calendarDayContent.text = contentForTargetDate
                     } else {
                         showTextInputPopup(selectedDate)
                     }
