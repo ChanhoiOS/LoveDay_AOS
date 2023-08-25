@@ -59,7 +59,8 @@ class MemoFragment : Fragment() {
     private fun fetchData(param: HashMap<String, Any>) {
         NetworkManager.getMemo(param) { data ->
             if (data != null) {
-                memoModelData = data
+                var sortedData = data.sortedByDescending { it.id ?: Int.MIN_VALUE }
+                memoModelData = sortedData
                 memoModelData?.let {
                     adapter = MemoItemAdapter(memoModelData)
                     binding.memoRecyclerView.adapter = adapter
@@ -68,6 +69,11 @@ class MemoFragment : Fragment() {
                 // 데이터 가져오기 실패
             }
         }
+    }
+
+    private fun postMemo() {
+        val param = HashMap<String, Any>()
+        param["writer"] = "sI3fpy"
     }
 
     companion object {
