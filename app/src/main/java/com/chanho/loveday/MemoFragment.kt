@@ -56,12 +56,6 @@ class MemoFragment : Fragment(), MemoDataListener {
         return binding.root
     }
 
-    override fun onMemoDataEntered(title: String, content: String) {
-        println("title: $title")
-        println("content: $content")
-
-    }
-
     private fun setData() {
         val param = HashMap<String, Any>()
         param["writer"] = "sI3fpy"
@@ -83,9 +77,20 @@ class MemoFragment : Fragment(), MemoDataListener {
         }
     }
 
-    private fun postMemo() {
+    override fun onMemoDataEntered(title: String, content: String) {
         val param = HashMap<String, Any>()
         param["writer"] = "sI3fpy"
+        param["title"] = "안드로이드 테스트입니당"
+        param["content"] = "내용입니다."
+        registerMemo(param)
+    }
+
+    private fun registerMemo(data: HashMap<String, Any>) {
+        NetworkManager.postMemoRequest(data, {
+            setData()
+        }, {
+
+        })
     }
 
     companion object {
