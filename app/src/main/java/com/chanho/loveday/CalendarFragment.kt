@@ -1,5 +1,7 @@
 package com.chanho.loveday
 
+import android.app.AlertDialog
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.text.style.ForegroundColorSpan
@@ -7,9 +9,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import com.chanho.loveday.databinding.FragmentCalendarBinding
 import com.chanho.loveday.databinding.FragmentDDayBinding
 import com.chanho.loveday.model.CalendarModel
+import com.google.android.material.snackbar.Snackbar
 import com.prolificinteractive.materialcalendarview.*
 import com.prolificinteractive.materialcalendarview.spans.DotSpan
 import java.util.*
@@ -26,7 +30,7 @@ private const val ARG_PARAM2 = "param2"
  */
 class CalendarFragment : Fragment() {
     // TODO: Rename and change types of parameters
-    private var param1: String? = null
+    private var specialDateName: String? = null
     private var param2: String? = null
 
     private lateinit var binding: FragmentCalendarBinding
@@ -35,7 +39,6 @@ class CalendarFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
     }
@@ -67,11 +70,16 @@ class CalendarFragment : Fragment() {
                     }
 
                     var selectedDate = "$year-$month-$day"
-
                     val contentForTargetDate = calendarModelData?.find { calendarModel ->
                         calendarModel.specialDate == selectedDate
                     }?.content
             println("contentForTargetDate: $contentForTargetDate")
+
+                    if (contentForTargetDate != null) {
+
+                    } else {
+                        showTextInputPopup(selectedDate)
+                    }
                 }
             }
         })
@@ -83,7 +91,7 @@ class CalendarFragment : Fragment() {
 
     private fun setData() {
         val param = HashMap<String, Any>()
-        param["writer"] = "inbwvv"
+        param["writer"] = "lul7qF"
         fetchData(param)
     }
 
@@ -122,6 +130,48 @@ class CalendarFragment : Fragment() {
 
         return specialDates
     }
+
+    private fun showTextInputPopup(specialDate: String) {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Enter Text")
+
+        val input = EditText(requireContext())
+        input.hint = "Enter your text here"
+        builder.setView(input)
+
+        builder.setPositiveButton("OK") { dialog, _ ->
+            val enteredText = input.text.toString()
+            if (enteredText.isNotBlank()) {
+                // 여기에서 입력된 텍스트를 사용하거나 처리할 수 있습니다.
+                //Snackbar.make(requireView(), "Entered text: $enteredText", Snackbar.LENGTH_SHORT).show()
+                val param = HashMap<String, Any>()
+
+                param["specialDate"] = specialDate
+                param["content"] = enteredText
+                param["writer"] = "lul7qF"
+
+                postCalendar(param)
+            }
+            dialog.dismiss()
+        }
+
+        builder.setNegativeButton("Cancel") { dialog, _ ->
+            dialog.cancel()
+        }
+
+        builder.show()
+    }
+
+    fun postCalendar(data: HashMap<String, Any>) {
+        NetworkManager.postRequest(data,
+            {
+                setData()
+            },
+            {
+                // 실패 처리 로직을 여기에 작성합니다.
+            })
+    }
+
 
 
     companion object {
