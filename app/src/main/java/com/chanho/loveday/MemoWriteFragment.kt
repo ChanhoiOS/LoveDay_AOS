@@ -10,12 +10,21 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 class MemoWriteFragment : BottomSheetDialogFragment() {
 
     private lateinit var binding: MemoWriteViewBinding
+    private var memoDataListener: MemoDataListener? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = MemoWriteViewBinding.inflate(inflater, container, false )
+
+        binding.memoConfirmBtn.setOnClickListener {
+            val title = binding.memoWriteTitle.text.toString()
+            val content = binding.memoWriteContent.text.toString()
+
+            memoDataListener?.onMemoDataEntered(title, content)
+            dismiss() // 다이얼로그 닫기
+        }
 
         return binding.root
     }
@@ -40,4 +49,12 @@ class MemoWriteFragment : BottomSheetDialogFragment() {
             dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN or WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         }
     }
+
+    fun setMemoDataListener(listener: MemoDataListener) {
+        memoDataListener = listener
+    }
+}
+
+interface MemoDataListener {
+    fun onMemoDataEntered(title: String, content: String)
 }

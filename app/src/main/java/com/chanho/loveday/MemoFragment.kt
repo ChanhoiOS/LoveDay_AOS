@@ -22,7 +22,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [MemoFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class MemoFragment : Fragment() {
+class MemoFragment : Fragment(), MemoDataListener {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -49,13 +49,17 @@ class MemoFragment : Fragment() {
 
         binding.memoRegisterButton.setOnClickListener {
             val memoTakeDialog = MemoWriteFragment()
+            memoTakeDialog.setMemoDataListener(this)
             memoTakeDialog.show(requireActivity().supportFragmentManager, "memo_take_dialog")
         }
 
-
-
-
         return binding.root
+    }
+
+    override fun onMemoDataEntered(title: String, content: String) {
+        println("title: $title")
+        println("content: $content")
+
     }
 
     private fun setData() {
