@@ -5,6 +5,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.chanho.loveday.adapter.MemoItemAdapter
+import com.chanho.loveday.databinding.FragmentDDayBinding
+import com.chanho.loveday.databinding.FragmentMemoBinding
+import com.chanho.loveday.model.MemoModel
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -21,6 +25,8 @@ class MemoFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    private lateinit var binding: FragmentMemoBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -33,8 +39,19 @@ class MemoFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_memo, container, false)
+        binding = FragmentMemoBinding.inflate(inflater, container, false )
+
+        val memoList = listOf(
+            MemoModel(1, "2", "3", "4"),
+            MemoModel(1, "2", "3", "4"),
+            MemoModel(1, "2", "3", "4"),
+            MemoModel(1, "2", "3", "4")
+        )
+
+        val adapter = MemoItemAdapter(memoList)
+        binding.memoRecyclerView.adapter = adapter
+
+        return binding.root
     }
 
     companion object {
