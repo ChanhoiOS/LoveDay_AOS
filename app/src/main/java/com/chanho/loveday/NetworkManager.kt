@@ -6,10 +6,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.QueryMap
+import retrofit2.http.*
 
 object NetworkManager {
     private val retrofit: Retrofit = Retrofit.Builder()
@@ -56,6 +53,22 @@ object NetworkManager {
             }
         })
     }
+
+    fun deleteCalendar(params: HashMap<String, Any>, success: () -> Unit, failure: () -> Unit) {
+        apiService.deleteCalendar(params).enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                if (response.isSuccessful) {
+                    success()
+                } else {
+                    failure()
+                }
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                failure()
+            }
+        })
+    }
 }
 
 interface ApiService {
@@ -64,4 +77,7 @@ interface ApiService {
 
     @GET("api/calendar")
     fun getCalendar(@QueryMap params: HashMap<String, Any>): Call<List<CalendarModel>>
+
+    @HTTP(method = "DELETE", path="api/calendar", hasBody = true)
+    fun deleteCalendar(@Body params: HashMap<String, Any>): Call<Void>
 }

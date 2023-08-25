@@ -1,7 +1,6 @@
 package com.chanho.loveday
 
 import android.app.AlertDialog
-import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.text.style.ForegroundColorSpan
@@ -11,9 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import com.chanho.loveday.databinding.FragmentCalendarBinding
-import com.chanho.loveday.databinding.FragmentDDayBinding
 import com.chanho.loveday.model.CalendarModel
-import com.google.android.material.snackbar.Snackbar
 import com.prolificinteractive.materialcalendarview.*
 import com.prolificinteractive.materialcalendarview.spans.DotSpan
 import java.util.*
@@ -76,7 +73,7 @@ class CalendarFragment : Fragment() {
             println("contentForTargetDate: $contentForTargetDate")
 
                     if (contentForTargetDate != null) {
-
+                        showDeleteConfirmationPopup(selectedDate)
                     } else {
                         showTextInputPopup(selectedDate)
                     }
@@ -109,6 +106,7 @@ class CalendarFragment : Fragment() {
     fun addSpecialDateDecorators(calendarModels: List<CalendarModel>) {
         val specialDates = extractSpecialDates(calendarModels)
         val eventDecorator = EventDecorator(Color.parseColor("#0E406B"), specialDates)
+        binding.calendarManageView.removeDecorators()
         binding.calendarManageView.addDecorator(eventDecorator)
     }
 
@@ -136,7 +134,7 @@ class CalendarFragment : Fragment() {
         builder.setTitle("Enter Text")
 
         val input = EditText(requireContext())
-        input.hint = "Enter your text here"
+        input.hint = "새로운 일정을 입력하세요."
         builder.setView(input)
 
         builder.setPositiveButton("OK") { dialog, _ ->
@@ -162,6 +160,26 @@ class CalendarFragment : Fragment() {
         builder.show()
     }
 
+    private fun showDeleteConfirmationPopup(specialDate: String) {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("기념일 삭제")
+        builder.setMessage("정말로 기념일을 삭제하시겠습니까?\n(상대방에 의해 작성된 일정은 삭제할 수 없습니다.)")
+
+        builder.setPositiveButton("삭제") { dialog, _ ->
+            val param = HashMap<String, Any>()
+            param["specialDate"] = specialDate
+            param["writer"] = "lul7qF"
+            deleteCalendar(param)
+            dialog.dismiss()
+        }
+
+        builder.setNegativeButton("취소") { dialog, _ ->
+            dialog.cancel()
+        }
+
+        builder.show()
+    }
+
     fun postCalendar(data: HashMap<String, Any>) {
         NetworkManager.postRequest(data,
             {
@@ -170,6 +188,14 @@ class CalendarFragment : Fragment() {
             {
                 // 실패 처리 로직을 여기에 작성합니다.
             })
+    }
+
+    fun deleteCalendar(data: HashMap<String, Any>) {
+        NetworkManager.deleteCalendar(data, {
+            setData()
+        }) {
+
+        }
     }
 
 
