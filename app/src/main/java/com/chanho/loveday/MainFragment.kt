@@ -1,6 +1,8 @@
 package com.chanho.loveday
 
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
@@ -8,9 +10,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.theartofdev.edmodo.cropper.CropImage
+import com.theartofdev.edmodo.cropper.CropImageView
+import java.util.HashMap
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -68,9 +74,35 @@ class MainFragment : Fragment() {
 
     private fun eventSettingBtn(view: View) {
         val rightButton = view.findViewById<ImageButton>(R.id.rightButton)
+        var leftButton = view.findViewById<ImageButton>(R.id.leftButton)
 
         rightButton.setOnClickListener {
             Log.v("test log", "오른쪽 로그")
+        }
+
+        leftButton.setOnClickListener {
+            val photoSave = AlertDialog.Builder(requireContext())
+            var btnAction: DialogInterface.OnClickListener?
+
+            btnAction = DialogInterface.OnClickListener { _, _ ->
+                CropImage.activity()
+                    .setGuidelines(CropImageView.Guidelines.ON)
+                    .start(requireActivity())
+            }
+            photoSave.setPositiveButton("남자친구 프로필 사진 변경", btnAction)
+
+            btnAction = DialogInterface.OnClickListener { _, _ ->
+
+            }
+            photoSave.setNegativeButton("여자친구 프로필 사진 변경", btnAction)
+
+            btnAction = DialogInterface.OnClickListener { _, _ ->
+
+            }
+
+            photoSave.setNeutralButton("취소", btnAction)
+
+            photoSave.show()
         }
     }
 

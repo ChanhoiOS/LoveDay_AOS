@@ -70,4 +70,7 @@ dependencies {
     // reload
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 
+    // photo
+    api 'com.theartofdev.edmodo:android-image-cropper:2.8.+'
+
 }
