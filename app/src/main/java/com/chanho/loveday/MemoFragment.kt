@@ -46,6 +46,7 @@ class MemoFragment : Fragment(), MemoDataListener {
         binding = FragmentMemoBinding.inflate(inflater, container, false )
 
         setData()
+        swipeRefresh()
 
         binding.memoRegisterButton.setOnClickListener {
             val memoTakeDialog = MemoWriteFragment()
@@ -54,6 +55,13 @@ class MemoFragment : Fragment(), MemoDataListener {
         }
 
         return binding.root
+    }
+
+    private fun swipeRefresh() {
+        binding.swipeLayout.setOnRefreshListener {
+            setData()
+            binding.swipeLayout.isRefreshing = false
+        }
     }
 
     private fun setData() {

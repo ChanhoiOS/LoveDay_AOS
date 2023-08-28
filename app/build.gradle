@@ -67,4 +67,7 @@ dependencies {
     // Scrolling Picker
     implementation 'com.super_rabbit.wheel_picker:NumberPicker:1.0.1'
 
+    // reload
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+
 }
