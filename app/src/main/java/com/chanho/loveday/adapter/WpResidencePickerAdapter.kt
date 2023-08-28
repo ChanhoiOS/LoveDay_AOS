@@ -1,20 +1,22 @@
 package com.chanho.loveday.adapter
 
 import com.super_rabbit.wheel_picker.WheelAdapter
+import java.text.SimpleDateFormat
+import java.util.*
 import kotlin.collections.ArrayList
 
 /** 지역 선택 Adapter */
-class WpResidencePickerAdapter(var ResidenceArr: ArrayList<String>) : WheelAdapter {
+class WpResidencePickerAdapter(var specialDates: ArrayList<String>) : WheelAdapter {
     //get item value based on item position in wheel
     override fun getValue(position: Int): String {
 
         if(position < 0){
-            if((position + ResidenceArr.size) == 0){
+            if((position + specialDates.size) == 0){
 
             }
-            return ResidenceArr[(position + ResidenceArr.size)]
+            return specialDates[(position + specialDates.size)]
         }
-        return ResidenceArr[(position%ResidenceArr.size)]
+        return specialDates[(position%specialDates.size)]
     }
 
     //get item position based on item string value
@@ -30,7 +32,7 @@ class WpResidencePickerAdapter(var ResidenceArr: ArrayList<String>) : WheelAdapt
     //return the maximum index
     override fun getMaxIndex(): Int {
 //        return Integer.MAX_VALUE
-        return ResidenceArr.size-1
+        return specialDates.size-1
     }
 
     //return the minimum index

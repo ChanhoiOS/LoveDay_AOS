@@ -143,6 +143,8 @@ class DDayFragment : Fragment() {
             // Set user defined adapter
             setAdapter(WpResidencePickerAdapter(specialDates))
 
+            scrollTo(getIndex(specialDates))
+
             // OnValueChangeListener
             setOnValueChangeListener(object : OnValueChangeListener {
                 override fun onValueChange(picker: WheelPicker, oldVal: String, newVal: String) {
@@ -158,6 +160,27 @@ class DDayFragment : Fragment() {
                 }
             })
         }
+    }
+
+    fun getIndex(specialDates: ArrayList<String>): Int {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val currentDate = Date()
+
+        var closestDateIndex = -1
+        var minDifference = Long.MAX_VALUE
+
+        for ((index, dateString) in specialDates.withIndex()) {
+            val date = dateFormat.parse(dateString)
+            if (date != null && date.after(currentDate)) {
+                val difference = date.time - currentDate.time
+                if (difference < minDifference) {
+                    closestDateIndex = index
+                    minDifference = difference
+                }
+            }
+        }
+
+        return closestDateIndex
     }
 
     companion object {
