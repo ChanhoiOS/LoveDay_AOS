@@ -143,6 +143,25 @@ object NetworkManager {
             }
         })
     }
+
+    fun postKey(data: HashMap<String, Any>, success: () -> Unit, failure: () -> Unit) {
+        apiService.postKey(data).enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                if (response.isSuccessful) {
+                    println("Key Success")
+                    success()
+                } else {
+                    println("Key Fail")
+                    failure()
+                }
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                println("Network Error: ${t.message}")
+                failure()
+            }
+        })
+    }
 }
 
 interface ApiService {
@@ -166,4 +185,7 @@ interface ApiService {
 
     @PUT("api/memo")
     fun updateMemo(@Body data: HashMap<String, Any>): Call<Void>
+
+    @POST("api/partner")
+    fun postKey(@Body data: HashMap<String, Any>): Call<Void>
 }

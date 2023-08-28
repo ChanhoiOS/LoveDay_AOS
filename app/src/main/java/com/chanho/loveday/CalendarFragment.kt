@@ -1,6 +1,8 @@
 package com.chanho.loveday
 
 import android.app.AlertDialog
+import android.content.Context
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
 import android.text.style.ForegroundColorSpan
@@ -9,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import androidx.appcompat.app.AppCompatActivity
 import com.chanho.loveday.databinding.FragmentCalendarBinding
 import com.chanho.loveday.model.CalendarModel
 import com.prolificinteractive.materialcalendarview.*
@@ -32,6 +35,8 @@ class CalendarFragment : Fragment() {
 
     private lateinit var binding: FragmentCalendarBinding
     private var calendarModelData: List<CalendarModel>? = null
+    private var preferences: SharedPreferences? = null
+    var partnerKey: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +51,38 @@ class CalendarFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentCalendarBinding.inflate(inflater, container, false )
+
+        preferences = requireActivity().getSharedPreferences("setDDay", Context.MODE_PRIVATE)
+
+
+        binding.calendarKeyButton.setOnClickListener {
+
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setTitle("사랑의 키 등록")
+
+            val input = EditText(requireContext())
+            input.hint = "LoveDay"
+            builder.setView(input)
+
+            builder.setPositiveButton("OK") { dialog, _ ->
+                val enteredText = input.text.toString()
+                if (enteredText.isNotBlank()) {
+                    val getKey = preferences?.getString("partnerKey", "")
+                    val keyEditor: SharedPreferences.Editor? = preferences?.edit()
+                    keyEditor?.putString("partnerKey", enteredText)
+                    keyEditor?.commit()
+
+                    registerKey(enteredText)
+                }
+                dialog.dismiss()
+            }
+
+            builder.setNegativeButton("Cancel") { dialog, _ ->
+                dialog.cancel()
+            }
+
+            builder.show()
+        }
 
         binding.calendarManageView.setOnDateChangedListener(object : OnDateSelectedListener {
             override fun onDateSelected(widget: MaterialCalendarView, date: CalendarDay, selected: Boolean) {
@@ -88,8 +125,13 @@ class CalendarFragment : Fragment() {
     }
 
     private fun setData() {
+        val privateKey = preferences?.getString("privateKey", "") ?: ""
+        val partnerKey = preferences?.getString("partnerKey", "") ?: ""
         val param = HashMap<String, Any>()
-        param["writer"] = "lul7qF"
+        param["writer"] = privateKey
+        if (partnerKey != "") {
+            param["partner"] = partnerKey
+        }
         fetchData(param)
     }
 
@@ -131,6 +173,8 @@ class CalendarFragment : Fragment() {
     }
 
     private fun showTextInputPopup(specialDate: String) {
+        val privateKey = preferences?.getString("privateKey", "") ?: ""
+
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("Enter Text")
 
@@ -141,13 +185,12 @@ class CalendarFragment : Fragment() {
         builder.setPositiveButton("OK") { dialog, _ ->
             val enteredText = input.text.toString()
             if (enteredText.isNotBlank()) {
-                // 여기에서 입력된 텍스트를 사용하거나 처리할 수 있습니다.
-                //Snackbar.make(requireView(), "Entered text: $enteredText", Snackbar.LENGTH_SHORT).show()
+
                 val param = HashMap<String, Any>()
 
                 param["specialDate"] = specialDate
                 param["content"] = enteredText
-                param["writer"] = "lul7qF"
+                param["writer"] = privateKey
 
                 postCalendar(param)
             }
@@ -162,6 +205,8 @@ class CalendarFragment : Fragment() {
     }
 
     private fun showDeleteConfirmationPopup(specialDate: String) {
+        val privateKey = preferences?.getString("privateKey", "") ?: ""
+
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("기념일 삭제")
         builder.setMessage("정말로 기념일을 삭제하시겠습니까?\n(상대방에 의해 작성된 일정은 삭제할 수 없습니다.)")
@@ -169,7 +214,7 @@ class CalendarFragment : Fragment() {
         builder.setPositiveButton("삭제") { dialog, _ ->
             val param = HashMap<String, Any>()
             param["specialDate"] = specialDate
-            param["writer"] = "lul7qF"
+            param["writer"] = privateKey
             deleteCalendar(param)
             dialog.dismiss()
         }
@@ -199,7 +244,19 @@ class CalendarFragment : Fragment() {
         }
     }
 
+    fun registerKey(partner: String) {
+        val privateKey = preferences?.getString("privateKey", "") ?: ""
 
+        val param = HashMap<String, Any>()
+        param["partner"] = partner
+        param["writer"] = privateKey
+
+        NetworkManager.postKey(param, {
+            setData()
+        }) {
+            println("키등록 실패")
+        }
+    }
 
     companion object {
         /**
