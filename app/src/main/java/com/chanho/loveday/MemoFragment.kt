@@ -1,5 +1,7 @@
 package com.chanho.loveday
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -54,6 +56,8 @@ class MemoFragment : Fragment(), MemoDataListener {
             memoTakeDialog.show(requireActivity().supportFragmentManager, "memo_take_dialog")
         }
 
+
+
         return binding.root
     }
 
@@ -76,7 +80,7 @@ class MemoFragment : Fragment(), MemoDataListener {
                 var sortedData = data.sortedByDescending { it.id ?: Int.MIN_VALUE }
                 memoModelData = sortedData
                 memoModelData?.let {
-                    adapter = MemoItemAdapter(memoModelData)
+                    adapter = MemoItemAdapter(this, memoModelData)
                     binding.memoRecyclerView.adapter = adapter
                 }
             } else {
@@ -99,6 +103,45 @@ class MemoFragment : Fragment(), MemoDataListener {
         }, {
 
         })
+    }
+
+    private fun deleteMemo(data: HashMap<String, Any>) {
+        NetworkManager.deleteMemo(data, {
+            setData()
+        }, {
+
+        })
+    }
+
+    fun moreAction(data: Map<String, Any>) {
+
+        val momoDialog = AlertDialog.Builder(requireContext())
+        var btnAction: DialogInterface.OnClickListener?
+
+        val id = data["id"] as? Int ?: 0
+        val writer = data["writer"] as? String ?: ""
+        val title = data["title"] as? String ?: ""
+        val content = data["content"] as? String ?: ""
+
+        btnAction = DialogInterface.OnClickListener { _, _ ->
+
+        }
+        momoDialog.setPositiveButton("수정", btnAction)
+
+        btnAction = DialogInterface.OnClickListener { _, _ ->
+            val param = HashMap<String, Any>()
+            param["writer"] = writer
+            param["id"] = id
+            deleteMemo(param)
+        }
+        momoDialog.setNegativeButton("삭제", btnAction)
+
+        btnAction = DialogInterface.OnClickListener { _, _ ->
+            println("취소")
+        }
+        momoDialog.setNeutralButton("취소", btnAction)
+
+        momoDialog.show()
     }
 
     companion object {

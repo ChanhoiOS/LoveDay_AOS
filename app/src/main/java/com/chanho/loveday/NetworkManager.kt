@@ -108,6 +108,22 @@ object NetworkManager {
             }
         })
     }
+
+    fun deleteMemo(params: HashMap<String, Any>, success: () -> Unit, failure: () -> Unit) {
+        apiService.deleteMemo(params).enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                if (response.isSuccessful) {
+                    success()
+                } else {
+                    failure()
+                }
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                failure()
+            }
+        })
+    }
 }
 
 interface ApiService {
@@ -125,4 +141,7 @@ interface ApiService {
 
     @POST("api/memo")
     fun saveMemo(@Body data: HashMap<String, Any>): Call<Void>
+
+    @HTTP(method = "DELETE", path="api/memo", hasBody = true)
+    fun deleteMemo(@Body params: HashMap<String, Any>): Call<Void>
 }
