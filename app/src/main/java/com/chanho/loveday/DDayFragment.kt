@@ -86,7 +86,7 @@ class DDayFragment : Fragment() {
             }.time
 
             val anniversaryStr = dateFormatter.format(anniversaryDate)
-            val days = year * 365
+            val days = year
 
             val insertIndex = when (year) {
                 1 -> 4
@@ -145,7 +145,15 @@ class DDayFragment : Fragment() {
 
             scrollTo(getIndex(specialDates))
 
-            // OnValueChangeListener
+            val index = getIndex(specialDates)
+            val dayText = specialDDayCheck[index].values.first()
+
+            if (dayText > 99) {
+                binding.ddayDatingDay.text = dayText.toString() + "일"
+            } else {
+                binding.ddayDatingDay.text = dayText.toString() + "주년"
+            }
+
             setOnValueChangeListener(object : OnValueChangeListener {
                 override fun onValueChange(picker: WheelPicker, oldVal: String, newVal: String) {
                     val out = "Current: ${picker.getCurrentItem()}"
@@ -155,7 +163,12 @@ class DDayFragment : Fragment() {
                     if (value == 0) {
                         binding.ddayDatingDay.text = "만난 날"
                     } else {
-                        binding.ddayDatingDay.text = value.toString()
+                        if(value > 99) {
+                            binding.ddayDatingDay.text = value.toString() + "일"
+                        } else {
+                            binding.ddayDatingDay.text = value.toString() + "주년"
+                        }
+
                     }
                 }
             })
