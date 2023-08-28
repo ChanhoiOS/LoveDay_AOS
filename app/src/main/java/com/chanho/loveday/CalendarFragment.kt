@@ -29,20 +29,12 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class CalendarFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var specialDateName: String? = null
-    private var param2: String? = null
-
     private lateinit var binding: FragmentCalendarBinding
     private var calendarModelData: List<CalendarModel>? = null
     private var preferences: SharedPreferences? = null
-    var partnerKey: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param2 = it.getString(ARG_PARAM2)
-        }
     }
 
     override fun onCreateView(
