@@ -156,8 +156,6 @@ class DDayFragment : Fragment() {
 
             setOnValueChangeListener(object : OnValueChangeListener {
                 override fun onValueChange(picker: WheelPicker, oldVal: String, newVal: String) {
-                    val out = "Current: ${picker.getCurrentItem()}"
-                    println("out:: $out")
                     val index = specialDates.indexOf(binding.wpPicker.getCurrentItem())
                     val value = specialDDayCheck[index].values.first()
                     if (value == 0) {
