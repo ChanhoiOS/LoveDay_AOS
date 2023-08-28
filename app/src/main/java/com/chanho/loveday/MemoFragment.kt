@@ -1,12 +1,15 @@
 package com.chanho.loveday
 
 import android.app.AlertDialog
+import android.content.Context
 import android.content.DialogInterface
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import com.chanho.loveday.adapter.MemoItemAdapter
 import com.chanho.loveday.databinding.FragmentMemoBinding
 import com.chanho.loveday.model.MemoModel
@@ -23,20 +26,13 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class MemoFragment : Fragment(), MemoDataListener {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
     private lateinit var binding: FragmentMemoBinding
     private var memoModelData: List<MemoModel>? = null
     lateinit var adapter: MemoItemAdapter
+    private var preferences: SharedPreferences? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
     }
 
     override fun onCreateView(
@@ -45,8 +41,39 @@ class MemoFragment : Fragment(), MemoDataListener {
     ): View? {
         binding = FragmentMemoBinding.inflate(inflater, container, false )
 
+        preferences = requireActivity().getSharedPreferences("setDDay", Context.MODE_PRIVATE)
+
         setData()
         swipeRefresh()
+
+        binding.memoKeyButton.setOnClickListener {
+
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setTitle("사랑의 키 등록")
+
+            val input = EditText(requireContext())
+            input.hint = "LoveDay"
+            builder.setView(input)
+
+            builder.setPositiveButton("OK") { dialog, _ ->
+                val enteredText = input.text.toString()
+                if (enteredText.isNotBlank()) {
+                    val getKey = preferences?.getString("partnerKey", "")
+                    val keyEditor: SharedPreferences.Editor? = preferences?.edit()
+                    keyEditor?.putString("partnerKey", enteredText)
+                    keyEditor?.commit()
+
+                    registerKey(enteredText)
+                }
+                dialog.dismiss()
+            }
+
+            builder.setNegativeButton("Cancel") { dialog, _ ->
+                dialog.cancel()
+            }
+
+            builder.show()
+        }
 
         binding.memoRegisterButton.setOnClickListener {
             val memoTakeDialog = MemoWriteFragment()
@@ -65,8 +92,14 @@ class MemoFragment : Fragment(), MemoDataListener {
     }
 
     private fun setData() {
+        val privateKey = preferences?.getString("privateKey", "") ?: ""
+        val partnerKey = preferences?.getString("partnerKey", "") ?: ""
+
         val param = HashMap<String, Any>()
-        param["writer"] = "sI3fpy"
+        param["writer"] = privateKey
+        if (partnerKey != "") {
+            param["partner"] = partnerKey
+        }
         fetchData(param)
     }
 
@@ -86,7 +119,9 @@ class MemoFragment : Fragment(), MemoDataListener {
     }
 
     override fun onMemoDataEntered(isEdit: Boolean, id: Int, title: String, content: String) {
+        val privateKey = preferences?.getString("privateKey", "") ?: ""
         val param = HashMap<String, Any>()
+
 
         if (isEdit) {
             param["id"] = id
@@ -94,7 +129,7 @@ class MemoFragment : Fragment(), MemoDataListener {
             param["content"] = content
             updateMemo(param)
         } else {
-            param["writer"] = "sI3fpy"
+            param["writer"] = privateKey
             param["title"] = title
             param["content"] = content
             registerMemo(param)
@@ -163,6 +198,20 @@ class MemoFragment : Fragment(), MemoDataListener {
         momoDialog.setNeutralButton("취소", btnAction)
 
         momoDialog.show()
+    }
+
+    fun registerKey(partner: String) {
+        val privateKey = preferences?.getString("privateKey", "") ?: ""
+
+        val param = HashMap<String, Any>()
+        param["partner"] = partner
+        param["writer"] = privateKey
+
+        NetworkManager.postKey(param, {
+            setData()
+        }) {
+            println("키등록 실패")
+        }
     }
 
     companion object {
