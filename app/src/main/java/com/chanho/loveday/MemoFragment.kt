@@ -8,9 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.chanho.loveday.adapter.MemoItemAdapter
-import com.chanho.loveday.databinding.FragmentDDayBinding
 import com.chanho.loveday.databinding.FragmentMemoBinding
-import com.chanho.loveday.model.CalendarModel
 import com.chanho.loveday.model.MemoModel
 import java.util.HashMap
 
@@ -52,7 +50,7 @@ class MemoFragment : Fragment(), MemoDataListener {
 
         binding.memoRegisterButton.setOnClickListener {
             val memoTakeDialog = MemoWriteFragment()
-            memoTakeDialog.setMemoDataListener(this)
+            memoTakeDialog.setMemoDataListener(this, false)
             memoTakeDialog.show(requireActivity().supportFragmentManager, "memo_take_dialog")
         }
 
@@ -89,12 +87,17 @@ class MemoFragment : Fragment(), MemoDataListener {
         }
     }
 
-    override fun onMemoDataEntered(title: String, content: String) {
+    override fun onMemoDataEntered(isEdit: Boolean, title: String, content: String) {
         val param = HashMap<String, Any>()
         param["writer"] = "sI3fpy"
-        param["title"] = "안드로이드 테스트입니당"
-        param["content"] = "내용입니다."
-        registerMemo(param)
+        param["title"] = title
+        param["content"] = content
+
+        if (isEdit) {
+            println("update: ")
+        } else {
+            registerMemo(param)
+        }
     }
 
     private fun registerMemo(data: HashMap<String, Any>) {
@@ -124,7 +127,16 @@ class MemoFragment : Fragment(), MemoDataListener {
         val content = data["content"] as? String ?: ""
 
         btnAction = DialogInterface.OnClickListener { _, _ ->
+            val memoTakeDialog = MemoWriteFragment()
 
+            val param = HashMap<String, Any>()
+            param["writer"] = writer
+            param["id"] = id
+            param["title"] = title
+            param["content"] = content
+            
+            memoTakeDialog.setMemoDataListener(this, true)
+            memoTakeDialog.show(requireActivity().supportFragmentManager, "memo_take_dialog")
         }
         momoDialog.setPositiveButton("수정", btnAction)
 
