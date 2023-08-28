@@ -12,6 +12,7 @@ class MemoWriteFragment : BottomSheetDialogFragment() {
     private lateinit var binding: MemoWriteViewBinding
     private var memoDataListener: MemoDataListener? = null
     var isEdit:Boolean = false
+    var postId: Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -23,7 +24,7 @@ class MemoWriteFragment : BottomSheetDialogFragment() {
             val title = binding.memoWriteTitle.text.toString()
             val content = binding.memoWriteContent.text.toString()
 
-            memoDataListener?.onMemoDataEntered(isEdit, title, content)
+            memoDataListener?.onMemoDataEntered(isEdit, postId, title, content)
             dismiss() // 다이얼로그 닫기
         }
 
@@ -51,19 +52,13 @@ class MemoWriteFragment : BottomSheetDialogFragment() {
         }
     }
 
-    fun setMemoDataListener(listener: MemoDataListener, edit: Boolean) {
+    fun setMemoDataListener(listener: MemoDataListener, edit: Boolean, id: Int = 0) {
         isEdit = edit
+        postId = id
         memoDataListener = listener
-    }
-
-    fun setMemoUpdateData(edit: Boolean, data: Map<String, Any>) {
-        val id = data["id"] as? Int ?: 0
-        val writer = data["writer"] as? String ?: ""
-        val title = data["title"] as? String ?: ""
-        val content = data["content"] as? String ?: ""
     }
 }
 
 interface MemoDataListener {
-    fun onMemoDataEntered(isEdit: Boolean, title: String, content: String)
+    fun onMemoDataEntered(isEdit: Boolean, id: Int, title: String, content: String)
 }

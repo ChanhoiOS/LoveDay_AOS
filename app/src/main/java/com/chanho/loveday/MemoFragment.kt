@@ -54,8 +54,6 @@ class MemoFragment : Fragment(), MemoDataListener {
             memoTakeDialog.show(requireActivity().supportFragmentManager, "memo_take_dialog")
         }
 
-
-
         return binding.root
     }
 
@@ -87,15 +85,18 @@ class MemoFragment : Fragment(), MemoDataListener {
         }
     }
 
-    override fun onMemoDataEntered(isEdit: Boolean, title: String, content: String) {
+    override fun onMemoDataEntered(isEdit: Boolean, id: Int, title: String, content: String) {
         val param = HashMap<String, Any>()
-        param["writer"] = "sI3fpy"
-        param["title"] = title
-        param["content"] = content
 
         if (isEdit) {
-            println("update: ")
+            param["id"] = id
+            param["title"] = title
+            param["content"] = content
+            updateMemo(param)
         } else {
+            param["writer"] = "sI3fpy"
+            param["title"] = title
+            param["content"] = content
             registerMemo(param)
         }
     }
@@ -110,6 +111,14 @@ class MemoFragment : Fragment(), MemoDataListener {
 
     private fun deleteMemo(data: HashMap<String, Any>) {
         NetworkManager.deleteMemo(data, {
+            setData()
+        }, {
+
+        })
+    }
+
+    private fun updateMemo(data: HashMap<String, Any>) {
+        NetworkManager.updateMemo(data, {
             setData()
         }, {
 
@@ -134,8 +143,8 @@ class MemoFragment : Fragment(), MemoDataListener {
             param["id"] = id
             param["title"] = title
             param["content"] = content
-            
-            memoTakeDialog.setMemoDataListener(this, true)
+
+            memoTakeDialog.setMemoDataListener(this, true, id)
             memoTakeDialog.show(requireActivity().supportFragmentManager, "memo_take_dialog")
         }
         momoDialog.setPositiveButton("수정", btnAction)

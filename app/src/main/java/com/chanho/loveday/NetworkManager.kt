@@ -124,6 +124,25 @@ object NetworkManager {
             }
         })
     }
+
+    fun updateMemo(data: HashMap<String, Any>, success: () -> Unit, failure: () -> Unit) {
+        apiService.updateMemo(data).enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                if (response.isSuccessful) {
+                    println("update Success")
+                    success()
+                } else {
+                    println("update Fail")
+                    failure()
+                }
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                println("Network Error: ${t.message}")
+                failure()
+            }
+        })
+    }
 }
 
 interface ApiService {
@@ -144,4 +163,7 @@ interface ApiService {
 
     @HTTP(method = "DELETE", path="api/memo", hasBody = true)
     fun deleteMemo(@Body params: HashMap<String, Any>): Call<Void>
+
+    @PUT("api/memo")
+    fun updateMemo(@Body data: HashMap<String, Any>): Call<Void>
 }
