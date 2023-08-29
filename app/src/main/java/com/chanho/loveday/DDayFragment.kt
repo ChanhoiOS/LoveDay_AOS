@@ -137,9 +137,9 @@ class DDayFragment : Fragment() {
             // Set wheel min index
             setMin(16)
             // Set selected text color
-            setSelectedTextColor(R.color.black)
+            setSelectedTextColor(R.color.pink)
             // Set unselected text color
-            setUnselectedTextColor(R.color.pink)
+            setUnselectedTextColor(R.color.black)
             // Set user defined adapter
             setAdapter(WpResidencePickerAdapter(specialDates))
 
