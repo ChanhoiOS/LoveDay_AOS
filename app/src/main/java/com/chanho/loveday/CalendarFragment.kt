@@ -140,7 +140,7 @@ class CalendarFragment : Fragment() {
 
     fun addSpecialDateDecorators(calendarModels: List<CalendarModel>) {
         val specialDates = extractSpecialDates(calendarModels)
-        val eventDecorator = EventDecorator(Color.parseColor("#0E406B"), specialDates)
+        val eventDecorator = EventDecorator(Color.parseColor("#FF879B"), specialDates)
         binding.calendarManageView.removeDecorators()
         binding.calendarManageView.addDecorator(eventDecorator)
     }
@@ -282,7 +282,7 @@ class SaturdayDecorator : DayViewDecorator {
     }
 
     override fun decorate(view: DayViewFacade) {
-        view.addSpan(ForegroundColorSpan(Color.parseColor("#87CEFA")))
+        view.addSpan(ForegroundColorSpan(Color.parseColor("#FF879B")))
     }
 }
 

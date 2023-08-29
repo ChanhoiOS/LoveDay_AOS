@@ -39,6 +39,7 @@
         android:fontFamily="@font/pretendard_bold"
         android:text="두 분의 일정을 관리해보세요!"
         android:textSize="24sp"
+        android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/calendarKeyButton" />
 
@@ -56,10 +57,10 @@
         app:layout_constraintTop_toBottomOf="@+id/calendarTitleText"
         app:layout_constraintBottom_toTopOf="@+id/calendar_info_view"
         app:layout_constraintVertical_chainStyle="packed"
-        app:selectedDayBackgroundColor="#FFEACA"
-        app:selectedDayBackgroundEndColor="#f79256"
-        app:selectedDayBackgroundStartColor="#f79256"
-        app:selectedDayTextColor="#FFFFFF"
+        app:selectedDayBackgroundColor="#FF879B"
+        app:selectedDayBackgroundEndColor="#FF879B"
+        app:selectedDayBackgroundStartColor="#FF879B"
+        app:selectedDayTextColor="#FF879B"
         app:selectionType="single"
         app:weekendDayTextColor="#ef4550"
     />
