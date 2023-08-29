@@ -64,27 +64,6 @@
         app:selectionType="single"
         app:weekendDayTextColor="#ef4550"
     />
-<!--    <com.applikeysolutions.cosmocalendar.view.CalendarView-->
-<!--        android:id="@+id/calendar_manage_view"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="390dp"-->
-<!--        android:layout_marginTop="16dp"-->
-<!--        app:connectedDayIconPosition="top"-->
-<!--        app:currentDayTextColor="#f79256"-->
-<!--        app:firstDayOfTheWeek="sunday"-->
-<!--        app:orientation="horizontal"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/calendarTitleText"-->
-<!--        app:layout_constraintBottom_toTopOf="@+id/calendar_info_view"-->
-<!--        app:layout_constraintVertical_chainStyle="packed"-->
-<!--        app:selectedDayBackgroundColor="#FFEACA"-->
-<!--        app:selectedDayBackgroundEndColor="#f79256"-->
-<!--        app:selectedDayBackgroundStartColor="#f79256"-->
-<!--        app:selectedDayTextColor="#FFFFFF"-->
-<!--        app:selectionType="single"-->
-<!--        app:weekendDayTextColor="#ef4550"-->
-<!--        />-->
 
     <View
         android:id="@+id/calendar_info_view"
@@ -106,6 +85,7 @@
         android:layout_marginLeft="20dp"
         android:text="2023-08-11"
         android:textSize="12sp"
+        android:fontFamily="@font/pretendard_bold"
         app:layout_constraintTop_toTopOf="@+id/calendar_info_view"
         app:layout_constraintStart_toStartOf="parent"
         />
@@ -117,7 +97,8 @@
         android:layout_marginTop="8dp"
         android:layout_marginLeft="20dp"
         android:text="메모 내용"
-        android:textSize="12sp"
+        android:textSize="16sp"
+        android:fontFamily="@font/pretendard_bold"
         app:layout_constraintTop_toBottomOf="@+id/calendar_day_text"
         app:layout_constraintStart_toStartOf="parent"
         />
