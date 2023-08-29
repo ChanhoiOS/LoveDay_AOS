@@ -183,13 +183,13 @@ class CalendarFragment : Fragment() {
         val privateKey = preferences?.getString("privateKey", "") ?: ""
 
         val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle("Enter Text")
+        builder.setTitle("일정 등록")
 
         val input = EditText(requireContext())
         input.hint = "새로운 일정을 입력하세요."
         builder.setView(input)
 
-        builder.setPositiveButton("OK") { dialog, _ ->
+        builder.setPositiveButton("저장") { dialog, _ ->
             val enteredText = input.text.toString()
             if (enteredText.isNotBlank()) {
 
@@ -204,7 +204,7 @@ class CalendarFragment : Fragment() {
             dialog.dismiss()
         }
 
-        builder.setNegativeButton("Cancel") { dialog, _ ->
+        builder.setNegativeButton("취소") { dialog, _ ->
             dialog.cancel()
         }
 
