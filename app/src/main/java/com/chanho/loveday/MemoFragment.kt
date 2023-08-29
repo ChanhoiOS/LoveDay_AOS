@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import com.chanho.loveday.adapter.GridSpacingItemDecoration
 import com.chanho.loveday.adapter.MemoItemAdapter
 import com.chanho.loveday.databinding.FragmentMemoBinding
@@ -199,10 +200,15 @@ class MemoFragment : Fragment(), MemoDataListener {
         momoDialog.setPositiveButton("수정", btnAction)
 
         btnAction = DialogInterface.OnClickListener { _, _ ->
+            val privateKey = preferences?.getString("privateKey", "") ?: ""
             val param = HashMap<String, Any>()
-            param["writer"] = writer
-            param["id"] = id
-            deleteMemo(param)
+            if (writer == privateKey) {
+                param["writer"] = writer
+                param["id"] = id
+                deleteMemo(param)
+            } else {
+                Toast.makeText(requireContext(), "상대방에 의해 작성된 메모는 삭제할 수 없습니다.", Toast.LENGTH_SHORT).show()
+            }
         }
         momoDialog.setNegativeButton("삭제", btnAction)
 
