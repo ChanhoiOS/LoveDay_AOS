@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import com.chanho.loveday.adapter.GridSpacingItemDecoration
 import com.chanho.loveday.adapter.MemoItemAdapter
 import com.chanho.loveday.databinding.FragmentMemoBinding
 import com.chanho.loveday.model.MemoModel
@@ -111,6 +112,12 @@ class MemoFragment : Fragment(), MemoDataListener {
                 memoModelData?.let {
                     adapter = MemoItemAdapter(this, memoModelData)
                     binding.memoRecyclerView.adapter = adapter
+                    val spanCount = 2 // 열의 개수
+                    val spacing = 30 // 아이템 간격 (dp 단위)
+                    val includeEdge = true // 가장자리에도 간격을 포함할지 여부
+
+                    val itemDecoration = GridSpacingItemDecoration(spanCount, spacing, includeEdge)
+                    binding.memoRecyclerView.addItemDecoration(itemDecoration)
                 }
             } else {
                 // 데이터 가져오기 실패

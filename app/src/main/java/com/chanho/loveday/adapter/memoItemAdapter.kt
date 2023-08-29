@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -18,7 +19,7 @@ class MemoItemAdapter(val fragment: Fragment, val memoList: List<MemoModel>?): R
     class GridAdapter(val layout: View): RecyclerView.ViewHolder(layout) {
         var title = layout.findViewById<TextView>(R.id.momoGridTitleText)
         var content = layout.findViewById<TextView>(R.id.memoGridContentText)
-        var editBtn = layout.findViewById<Button>(R.id.memoEditButton)
+        var editBtn = layout.findViewById<ImageButton>(R.id.memoEditButton)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GridAdapter {
