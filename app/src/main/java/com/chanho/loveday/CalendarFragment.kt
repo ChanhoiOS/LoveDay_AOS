@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
@@ -144,7 +145,7 @@ class CalendarFragment : Fragment() {
 
     fun addSpecialDateDecorators(calendarModels: List<CalendarModel>) {
         val specialDates = extractSpecialDates(calendarModels)
-        val eventDecorator = EventDecorator(Color.parseColor("#FF879B"), specialDates)
+        val eventDecorator = EventDecorator(requireContext(), Color.parseColor("#FF879B"), specialDates)
         binding.calendarManageView.removeDecorators()
         binding.calendarManageView.addDecorator(eventDecorator)
 
@@ -280,14 +281,23 @@ class CalendarFragment : Fragment() {
     }
 }
 
-class EventDecorator() : DayViewDecorator {
+class EventDecorator : DayViewDecorator {
 
     private var color = 0
-    private lateinit var dates : HashSet<CalendarDay>
+    private lateinit var dates: HashSet<CalendarDay>
+    private val drawable: Drawable?
 
-    constructor(color: Int, dates: Collection<CalendarDay>) : this() {
-        this.color=color
-        this.dates=HashSet(dates)
+    constructor(context: Context, date: CalendarDay, color: Int) {
+        this.color = color
+        this.dates = HashSet()
+        this.dates.add(date)
+        this.drawable = context.getDrawable(R.drawable.calendar_selector)
+    }
+
+    constructor(context: Context, color: Int, dates: Collection<CalendarDay>) {
+        this.color = color
+        this.dates = HashSet(dates)
+        this.drawable = context.getDrawable(R.drawable.calendar_selector)
     }
 
     override fun shouldDecorate(day: CalendarDay?): Boolean {
@@ -298,3 +308,8 @@ class EventDecorator() : DayViewDecorator {
         view?.addSpan(DotSpan(10F, color))
     }
 }
+
+
+
+
+
