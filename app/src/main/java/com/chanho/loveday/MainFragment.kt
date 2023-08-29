@@ -3,6 +3,7 @@ package com.chanho.loveday
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
@@ -77,7 +78,8 @@ class MainFragment : Fragment() {
         var leftButton = view.findViewById<ImageButton>(R.id.leftButton)
 
         rightButton.setOnClickListener {
-            Log.v("test log", "오른쪽 로그")
+            val intent = Intent(activity, SettingActivity::class.java)
+            startActivity(intent)
         }
 
         leftButton.setOnClickListener {

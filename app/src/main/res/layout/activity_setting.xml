@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    tools:context=".SettingActivity">
+
+    <TextView
+        android:id="@+id/settingTitleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/pretendard_bold"
+        android:text="설정"
+        android:textSize="24sp"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/settingCloseButton"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:src="@drawable/ic_close_gray"
+        android:background="?android:attr/selectableItemBackground"
+        android:layout_gravity="start" />
+
+        <TextView
+            android:id="@+id/notificationLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="푸시 알림"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:fontFamily="@font/pretendard_bold"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="30dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/settingTitleText"
+            />
+
+        <Switch
+            android:id="@+id/notificationSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:textColor="@color/colorPrimary"
+            android:layout_gravity="center_vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/settingTitleText"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="30dp"
+            />
+
+    <TextView
+        android:id="@+id/versionLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="버전정보"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:fontFamily="@font/pretendard_bold"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="30dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/notificationLabel"
+        />
+
+    <TextView
+        android:id="@+id/versionLabelText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1.0"
+        android:textColor="@color/colorPrimary"
+        android:layout_gravity="center_vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/notificationSwitch"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="30dp"
+        />
+
+    <TextView
+        android:id="@+id/privateCodeLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="개인 코드"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:fontFamily="@font/pretendard_bold"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="30dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/versionLabel"
+        />
+
+    <TextView
+        android:id="@+id/privateCodeLabelText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="random"
+        android:textColor="@color/colorPrimary"
+        android:layout_gravity="center_vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/versionLabelText"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="30dp"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

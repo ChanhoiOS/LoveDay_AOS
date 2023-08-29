@@ -16,6 +16,9 @@
         android:theme="@style/Theme.LoveDay"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".SettingActivity"
+            android:exported="false" />
+        <activity
             android:name=".CropperActivity"
             android:exported="false" />
         <activity
