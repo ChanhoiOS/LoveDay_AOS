@@ -4,12 +4,14 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.SharedPreferences
+import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.TextView
 import com.chanho.loveday.adapter.GridSpacingItemDecoration
 import com.chanho.loveday.adapter.MemoItemAdapter
 import com.chanho.loveday.databinding.FragmentMemoBinding
@@ -170,6 +172,9 @@ class MemoFragment : Fragment(), MemoDataListener {
     fun moreAction(data: Map<String, Any>) {
 
         val momoDialog = AlertDialog.Builder(requireContext())
+        momoDialog.setTitle("메모 관리")
+        momoDialog.setMessage("(상대방에 의해 작성된 메모는 삭제할 수 없습니다.)")
+
         var btnAction: DialogInterface.OnClickListener?
 
         val id = data["id"] as? Int ?: 0
