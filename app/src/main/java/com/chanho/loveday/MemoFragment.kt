@@ -46,7 +46,7 @@ class MemoFragment : Fragment(), MemoDataListener {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMemoBinding.inflate(inflater, container, false )
-        
+
         val itemDecoration = GridSpacingItemDecoration(spanCount, spacing, includeEdge)
         binding.memoRecyclerView.addItemDecoration(itemDecoration)
 
@@ -59,12 +59,13 @@ class MemoFragment : Fragment(), MemoDataListener {
 
             val builder = AlertDialog.Builder(requireContext())
             builder.setTitle("사랑의 키 등록")
+            builder.setMessage("설정창에 있는 상대의 키를 등록하고 메모를 공유해요!")
 
             val input = EditText(requireContext())
             input.hint = "LoveDay"
             builder.setView(input)
 
-            builder.setPositiveButton("OK") { dialog, _ ->
+            builder.setPositiveButton("등록") { dialog, _ ->
                 val enteredText = input.text.toString()
                 if (enteredText.isNotBlank()) {
                     val getKey = preferences?.getString("partnerKey", "")
@@ -77,7 +78,7 @@ class MemoFragment : Fragment(), MemoDataListener {
                 dialog.dismiss()
             }
 
-            builder.setNegativeButton("Cancel") { dialog, _ ->
+            builder.setNegativeButton("취소") { dialog, _ ->
                 dialog.cancel()
             }
 

@@ -51,17 +51,21 @@ class CalendarFragment : Fragment() {
 
         preferences = requireActivity().getSharedPreferences("setDDay", Context.MODE_PRIVATE)
 
+        binding.calendarReloadButton.setOnClickListener {
+            setData()
+        }
 
         binding.calendarKeyButton.setOnClickListener {
 
             val builder = AlertDialog.Builder(requireContext())
             builder.setTitle("사랑의 키 등록")
+            builder.setMessage("설정창에 있는 상대의 키를 등록하고 메모를 공유해요!")
 
             val input = EditText(requireContext())
             input.hint = "LoveDay"
             builder.setView(input)
 
-            builder.setPositiveButton("OK") { dialog, _ ->
+            builder.setPositiveButton("등록") { dialog, _ ->
                 val enteredText = input.text.toString()
                 if (enteredText.isNotBlank()) {
                     val getKey = preferences?.getString("partnerKey", "")
@@ -74,7 +78,7 @@ class CalendarFragment : Fragment() {
                 dialog.dismiss()
             }
 
-            builder.setNegativeButton("Cancel") { dialog, _ ->
+            builder.setNegativeButton("취소") { dialog, _ ->
                 dialog.cancel()
             }
 
