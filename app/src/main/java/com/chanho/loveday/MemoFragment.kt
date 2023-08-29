@@ -109,6 +109,7 @@ class MemoFragment : Fragment(), MemoDataListener {
         param["writer"] = privateKey
         if (partnerKey != "") {
             param["partner"] = partnerKey
+            binding.memoKeyButton.setImageResource(R.drawable.main_heart_middle)
         }
         fetchData(param)
     }
@@ -222,6 +223,7 @@ class MemoFragment : Fragment(), MemoDataListener {
 
         NetworkManager.postKey(param, {
             setData()
+            binding.memoKeyButton.setImageResource(R.drawable.main_heart_middle)
         }) {
             println("키등록 실패")
         }

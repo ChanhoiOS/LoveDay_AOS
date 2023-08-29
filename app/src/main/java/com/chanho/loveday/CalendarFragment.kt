@@ -132,6 +132,7 @@ class CalendarFragment : Fragment() {
         param["writer"] = privateKey
         if (partnerKey != "") {
             param["partner"] = partnerKey
+            binding.calendarKeyButton.setImageResource(R.drawable.main_heart_middle)
         }
         fetchData(param)
     }
@@ -259,6 +260,7 @@ class CalendarFragment : Fragment() {
 
         NetworkManager.postKey(param, {
             setData()
+            binding.calendarKeyButton.setImageResource(R.drawable.main_heart_middle)
         }) {
             println("키등록 실패")
         }
