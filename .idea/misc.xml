@@ -18,6 +18,7 @@
         <entry key="app/src/main/res/layout/fragment_d_day.xml" value="0.30217336018880214" />
         <entry key="app/src/main/res/layout/fragment_main.xml" value="0.36749725341796874" />
         <entry key="app/src/main/res/layout/fragment_memo.xml" value="0.29836018880208337" />
+        <entry key="app/src/main/res/layout/loading_progressbar.xml" value="0.14878153056861906" />
         <entry key="app/src/main/res/layout/memo_grid_item.xml" value="0.388671875" />
         <entry key="app/src/main/res/layout/memo_write_view.xml" value="0.388671875" />
         <entry key="app/src/main/res/layout/setday_textview.xml" value="0.505" />

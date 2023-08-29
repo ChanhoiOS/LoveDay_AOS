@@ -2,20 +2,22 @@ package com.chanho.loveday
 
 import android.content.Intent
 import android.content.SharedPreferences
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.ProgressBar
+import androidx.appcompat.app.AppCompatActivity
 import com.applikeysolutions.cosmocalendar.selection.OnDaySelectedListener
 import com.applikeysolutions.cosmocalendar.selection.SingleSelectionManager
 import com.chanho.loveday.databinding.ActivitySetDayBinding
 import java.text.SimpleDateFormat
-
 import java.util.*
 import java.util.concurrent.TimeUnit
 
 class SetDayActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySetDayBinding
+    private lateinit var loadingIndicator: View
 
     private var preferences: SharedPreferences? = null
 
@@ -30,6 +32,8 @@ class SetDayActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         preferences = getSharedPreferences("setDDay", MODE_PRIVATE);
+
+        loadingIndicator = binding.progressBar
 
         binding.calendarView.selectionManager = SingleSelectionManager(OnDaySelectedListener {
             val year = binding.calendarView.selectedDays[0].calendar.weekYear
@@ -167,15 +171,22 @@ class SetDayActivity : AppCompatActivity() {
     }
 
     fun saveCalendar(data: HashMap<String, Any>) {
-        val url = "http://52.78.124.184:8080/api/calendar"
+        loadingIndicator.visibility = View.VISIBLE
+
+        var count = 0
+
         NetworkManager.postCalendarRequest(data,
             {
+                count += 1
+                if (count > 18) {
+                    loadingIndicator.visibility = View.GONE
+                }
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
                 finish()
             },
             {
-                // 실패 처리 로직을 여기에 작성합니다.
+                loadingIndicator.visibility = View.GONE
             })
     }
 }
