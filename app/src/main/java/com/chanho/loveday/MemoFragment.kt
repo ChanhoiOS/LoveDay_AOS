@@ -33,6 +33,9 @@ class MemoFragment : Fragment(), MemoDataListener {
     private var memoModelData: List<MemoModel>? = null
     lateinit var adapter: MemoItemAdapter
     private var preferences: SharedPreferences? = null
+    val spanCount = 2 // 열의 개수
+    val spacing = 30 // 아이템 간격 (dp 단위)
+    val includeEdge = true // 가장자리에도 간격을 포함할지 여부
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +46,9 @@ class MemoFragment : Fragment(), MemoDataListener {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMemoBinding.inflate(inflater, container, false )
+        
+        val itemDecoration = GridSpacingItemDecoration(spanCount, spacing, includeEdge)
+        binding.memoRecyclerView.addItemDecoration(itemDecoration)
 
         preferences = requireActivity().getSharedPreferences("setDDay", Context.MODE_PRIVATE)
 
@@ -114,12 +120,6 @@ class MemoFragment : Fragment(), MemoDataListener {
                 memoModelData?.let {
                     adapter = MemoItemAdapter(this, memoModelData)
                     binding.memoRecyclerView.adapter = adapter
-                    val spanCount = 2 // 열의 개수
-                    val spacing = 30 // 아이템 간격 (dp 단위)
-                    val includeEdge = true // 가장자리에도 간격을 포함할지 여부
-
-                    val itemDecoration = GridSpacingItemDecoration(spanCount, spacing, includeEdge)
-                    binding.memoRecyclerView.addItemDecoration(itemDecoration)
                 }
             } else {
                 // 데이터 가져오기 실패
