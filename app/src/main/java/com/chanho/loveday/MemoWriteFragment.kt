@@ -19,8 +19,14 @@ class MemoWriteFragment : BottomSheetDialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = MemoWriteViewBinding.inflate(inflater, container, false )
-        
+
         dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+
+        if (isEdit) {
+            binding.memoWriteTitleText.text = "메모 수정하기"
+        } else {
+            binding.memoWriteTitleText.text = "새로운 메모 작성하기"
+        }
 
         binding.memoConfirmBtn.setOnClickListener {
             val title = binding.memoWriteTitle.text.toString()
