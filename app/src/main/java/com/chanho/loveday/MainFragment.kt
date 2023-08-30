@@ -63,12 +63,6 @@ class MainFragment : Fragment() {
         setIngday()
         setProfile()
 
-        if (areMediaPermissionsGranted()) {
-            // 권한이 이미 허용된 경우에 대한 처리
-        } else {
-            requestMediaPermissions()
-        }
-
         return binding.root
     }
 
@@ -100,28 +94,33 @@ class MainFragment : Fragment() {
 
     private fun eventProfileBtn() {
         binding.leftButton.setOnClickListener {
-            val photoSave = AlertDialog.Builder(requireContext())
-            var btnAction: DialogInterface.OnClickListener?
+            if (areMediaPermissionsGranted()) {
+                val photoSave = AlertDialog.Builder(requireContext())
+                var btnAction: DialogInterface.OnClickListener?
 
-            btnAction = DialogInterface.OnClickListener { _, _ ->
-                whoImage = "boy"
-                pickImage()
+                btnAction = DialogInterface.OnClickListener { _, _ ->
+                    whoImage = "boy"
+                    pickImage()
+                }
+                photoSave.setPositiveButton("남자친구 프로필 사진 변경", btnAction)
+
+                btnAction = DialogInterface.OnClickListener { _, _ ->
+                    whoImage = "girl"
+                    pickImage()
+                }
+                photoSave.setNegativeButton("여자친구 프로필 사진 변경", btnAction)
+
+                btnAction = DialogInterface.OnClickListener { _, _ ->
+
+                }
+
+                photoSave.setNeutralButton("취소", btnAction)
+
+                photoSave.show()
+
+            } else {
+                requestMediaPermissions()
             }
-            photoSave.setPositiveButton("남자친구 프로필 사진 변경", btnAction)
-
-            btnAction = DialogInterface.OnClickListener { _, _ ->
-                whoImage = "girl"
-                pickImage()
-            }
-            photoSave.setNegativeButton("여자친구 프로필 사진 변경", btnAction)
-
-            btnAction = DialogInterface.OnClickListener { _, _ ->
-
-            }
-
-            photoSave.setNeutralButton("취소", btnAction)
-
-            photoSave.show()
         }
     }
 
