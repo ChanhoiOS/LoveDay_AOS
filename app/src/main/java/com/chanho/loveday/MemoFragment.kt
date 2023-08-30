@@ -173,10 +173,11 @@ class MemoFragment : Fragment(), MemoDataListener {
     }
 
     fun moreAction(data: Map<String, Any>) {
+        val privateKey = preferences?.getString("privateKey", "") ?: ""
 
         val momoDialog = AlertDialog.Builder(requireContext())
         momoDialog.setTitle("메모 관리")
-        momoDialog.setMessage("(상대방에 의해 작성된 메모는 삭제할 수 없습니다.)")
+        momoDialog.setMessage("(상대방에 의해 작성된 메모는 수정/삭제할 수 없습니다.)")
 
         var btnAction: DialogInterface.OnClickListener?
 
@@ -186,22 +187,26 @@ class MemoFragment : Fragment(), MemoDataListener {
         val content = data["content"] as? String ?: ""
 
         btnAction = DialogInterface.OnClickListener { _, _ ->
-            val memoTakeDialog = MemoWriteFragment()
+            if (writer == privateKey) {
+                val memoTakeDialog = MemoWriteFragment()
 
-            val param = HashMap<String, Any>()
-            param["writer"] = writer
-            param["id"] = id
-            param["title"] = title
-            param["content"] = content
+                val param = HashMap<String, Any>()
+                param["writer"] = writer
+                param["id"] = id
+                param["title"] = title
+                param["content"] = content
 
-            memoTakeDialog.setMemoDataListener(this, true, id)
-            memoTakeDialog.show(requireActivity().supportFragmentManager, "memo_take_dialog")
+                memoTakeDialog.setMemoDataListener(this, true, id)
+                memoTakeDialog.show(requireActivity().supportFragmentManager, "memo_take_dialog")
+            } else {
+                Toast.makeText(requireContext(), "상대방에 의해 작성된 메모는 수정할 수 없습니다.", Toast.LENGTH_SHORT).show()
+            }
         }
         momoDialog.setPositiveButton("수정", btnAction)
 
         btnAction = DialogInterface.OnClickListener { _, _ ->
-            val privateKey = preferences?.getString("privateKey", "") ?: ""
             val param = HashMap<String, Any>()
+
             if (writer == privateKey) {
                 param["writer"] = writer
                 param["id"] = id
