@@ -59,7 +59,7 @@ class SetDayActivity : AppCompatActivity() {
         setEditor?.putString("datingDay", datingDay)
         setEditor?.commit()
 
-        getDDay(selectedYear, selectedMonth, selectedMonth)
+        getDDay(selectedYear, selectedMonth, selectedDay)
         getSpecialInfo(datingDay)
     }
 
@@ -82,12 +82,13 @@ class SetDayActivity : AppCompatActivity() {
         }
 
         val differenceInMillis = today.timeInMillis - selectedCalendar.timeInMillis
-        val differenceInDays = TimeUnit.MILLISECONDS.toDays(differenceInMillis) + 1 // 사귄 첫 날을 1일로 처리합니다.
+        val differenceInDays = TimeUnit.MILLISECONDS.toDays(differenceInMillis) + 1
 
         val setEditor: SharedPreferences.Editor? = preferences?.edit()
         setEditor?.putLong("ingDay", differenceInDays)
-        setEditor?.commit()
+        setEditor?.apply()
     }
+
 
     fun getSpecialInfo(dday: String) {
         val dateFormatter = SimpleDateFormat("yyyy-MM-dd")
