@@ -63,7 +63,7 @@
         app:layout_constraintStart_toStartOf="parent"
         />
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/main_boy_Image"
         android:layout_width="100dp"
         android:layout_height="100dp"
@@ -75,7 +75,7 @@
         app:layout_constraintEnd_toStartOf="@+id/main_heart_Image"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/main_girl_Image"
         android:layout_width="100dp"
         android:layout_height="100dp"
