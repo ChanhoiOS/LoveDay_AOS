@@ -9,9 +9,10 @@
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.2975" />
         <entry key="app/src/main/res/drawable/main_background_roundview.xml" value="0.225" />
         <entry key="app/src/main/res/layout/activity_cropper.xml" value="0.388671875" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.23333333333333334" />
         <entry key="app/src/main/res/layout/activity_set_day.xml" value="0.16101226806640626" />
         <entry key="app/src/main/res/layout/activity_setting.xml" value="0.23836130351783785" />
+        <entry key="app/src/main/res/layout/bottom_nav_color.xml" value="0.168875587858059" />
         <entry key="app/src/main/res/layout/calendar_day_layout.xml" value="0.505" />
         <entry key="app/src/main/res/layout/corner_background_radius.xml" value="0.30483112441214194" />
         <entry key="app/src/main/res/layout/fragment_calendar.xml" value="0.24971822102864605" />
