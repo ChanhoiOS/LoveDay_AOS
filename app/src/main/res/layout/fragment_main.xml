@@ -63,7 +63,7 @@
         app:layout_constraintStart_toStartOf="parent"
         />
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/main_boy_Image"
         android:layout_width="100dp"
         android:layout_height="100dp"

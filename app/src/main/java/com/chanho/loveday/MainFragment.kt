@@ -1,23 +1,32 @@
 package com.chanho.loveday
 
+import android.Manifest
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.provider.MediaStore
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
+import com.bumptech.glide.Glide.with
+import com.chanho.loveday.databinding.FragmentMainBinding
 import com.theartofdev.edmodo.cropper.CropImage
-import com.theartofdev.edmodo.cropper.CropImageView
-import java.util.HashMap
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -35,6 +44,10 @@ class MainFragment : Fragment() {
     private var param2: String? = null
 
     private var preferences: SharedPreferences? = null
+    private lateinit var binding: FragmentMainBinding
+    var whoImage = "boy"
+
+    private val MEDIA_PERMISSION_REQUEST_CODE = 123
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,57 +57,53 @@ class MainFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_main, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        binding = FragmentMainBinding.inflate(inflater, container, false)
 
-        eventProfileBtn(view)
-        eventSettingBtn(view)
+        eventProfileBtn()
+        eventSettingBtn()
+        setIngday()
 
-        setIngday(view)
+        if (areMediaPermissionsGranted()) {
+            // 권한이 이미 허용된 경우에 대한 처리
+        } else {
+            requestMediaPermissions()
+        }
 
-        return view
+        return binding.root
     }
 
-    private fun setIngday(view: View) {
+    private fun setIngday() {
         preferences = requireActivity().getSharedPreferences("setDDay", Context.MODE_PRIVATE)
         val ingDay = preferences?.getLong("ingDay", 0)
-        val ingText = view.findViewById<TextView>(R.id.ingText)
-        ingText.text = ingDay.toString() + "일째"
+        binding.ingText.text = ingDay.toString() + "일째"
     }
 
-    private fun eventProfileBtn(view: View) {
-        val leftButton = view.findViewById<ImageButton>(R.id.leftButton)
-
-        leftButton.setOnClickListener {
+    private fun eventProfileBtn() {
+        binding.leftButton.setOnClickListener {
             Log.v("test log", "왼쪽 로그")
         }
     }
 
-    private fun eventSettingBtn(view: View) {
-        val rightButton = view.findViewById<ImageButton>(R.id.rightButton)
-        var leftButton = view.findViewById<ImageButton>(R.id.leftButton)
-
-        rightButton.setOnClickListener {
+    private fun eventSettingBtn() {
+        binding.rightButton.setOnClickListener {
             val intent = Intent(activity, SettingActivity::class.java)
             startActivity(intent)
         }
 
-        leftButton.setOnClickListener {
+        binding.leftButton.setOnClickListener {
             val photoSave = AlertDialog.Builder(requireContext())
             var btnAction: DialogInterface.OnClickListener?
 
             btnAction = DialogInterface.OnClickListener { _, _ ->
-                CropImage.activity()
-                    .setGuidelines(CropImageView.Guidelines.ON)
-                    .start(requireActivity())
+                whoImage = "boy"
+                pickImage()
             }
             photoSave.setPositiveButton("남자친구 프로필 사진 변경", btnAction)
 
             btnAction = DialogInterface.OnClickListener { _, _ ->
-
+                whoImage = "girl"
+                pickImage()
             }
             photoSave.setNegativeButton("여자친구 프로필 사진 변경", btnAction)
 
@@ -105,6 +114,86 @@ class MainFragment : Fragment() {
             photoSave.setNeutralButton("취소", btnAction)
 
             photoSave.show()
+        }
+    }
+
+    private fun pickImage() {
+        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        pickImageLauncher.launch(intent)
+    }
+
+    private fun cropImage(uri: Uri) {
+        val cropIntent = CropImage.activity(uri)
+            .setAspectRatio(1, 1) // 원하는 크롭 비율 설정
+            .getIntent(requireContext())
+        cropImageLauncher.launch(cropIntent)
+    }
+
+    private val pickImageLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data: Intent? = result.data
+                data?.data?.let { uri ->
+                    cropImage(uri)
+                }
+            }
+        }
+
+    private val cropImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data: Intent? = result.data
+                val cropResult = CropImage.getActivityResult(data)
+                cropResult.uri?.let { uri ->
+                    Log.e("YMC", "이미지 선택: $uri")
+                    if (whoImage == "boy") {
+                        Handler().postDelayed({
+                            GlideApp.with(requireActivity())
+                                .load(uri)
+                                .into(binding.mainBoyImage)
+                        }, 10)
+                    } else {
+                        Handler().postDelayed({
+                            GlideApp.with(requireActivity())
+                                .load(uri)
+                                .into(binding.mainGirlImage)
+                        }, 10)
+                    }
+                }
+            } else if (result.resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                val error = result.data?.let { CropImage.getActivityResult(it).error }
+                Toast.makeText(requireContext(), error?.message, Toast.LENGTH_SHORT).show()
+            }
+        }
+
+    private fun areMediaPermissionsGranted(): Boolean {
+        val readPermission = ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
+        val writePermission = ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        return readPermission == PackageManager.PERMISSION_GRANTED && writePermission == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun requestMediaPermissions() {
+        ActivityCompat.requestPermissions(
+            requireActivity(),
+            arrayOf(
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ),
+            MEDIA_PERMISSION_REQUEST_CODE
+        )
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == MEDIA_PERMISSION_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // 권한이 허용된 경우에 대한 처리
+            } else {
+                // 권한이 거부된 경우에 대한 처리
+            }
         }
     }
 
