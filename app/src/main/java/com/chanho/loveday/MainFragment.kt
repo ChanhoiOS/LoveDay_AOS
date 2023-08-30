@@ -16,15 +16,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import com.bumptech.glide.Glide
-import com.bumptech.glide.Glide.with
 import com.chanho.loveday.databinding.FragmentMainBinding
 import com.theartofdev.edmodo.cropper.CropImage
 
@@ -60,9 +56,12 @@ class MainFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentMainBinding.inflate(inflater, container, false)
 
+        preferences = requireActivity().getSharedPreferences("setDDay", Context.MODE_PRIVATE)
+
         eventProfileBtn()
         eventSettingBtn()
         setIngday()
+        setProfile()
 
         if (areMediaPermissionsGranted()) {
             // 권한이 이미 허용된 경우에 대한 처리
@@ -74,23 +73,32 @@ class MainFragment : Fragment() {
     }
 
     private fun setIngday() {
-        preferences = requireActivity().getSharedPreferences("setDDay", Context.MODE_PRIVATE)
         val ingDay = preferences?.getLong("ingDay", 0)
         binding.ingText.text = ingDay.toString() + "일째"
     }
 
-    private fun eventProfileBtn() {
-        binding.leftButton.setOnClickListener {
-            Log.v("test log", "왼쪽 로그")
+    private fun setProfile() {
+        val boyImagePath = preferences?.getString("boyImagePath", "") ?: ""
+        val girlImagePath = preferences?.getString("girlImagePath", "") ?: ""
+
+        if (boyImagePath != "") {
+            Handler().postDelayed({
+                GlideApp.with(requireActivity())
+                    .load(boyImagePath)
+                    .into(binding.mainBoyImage)
+            }, 10)
+        }
+
+        if (girlImagePath != "") {
+            Handler().postDelayed({
+                GlideApp.with(requireActivity())
+                    .load(girlImagePath)
+                    .into(binding.mainGirlImage)
+            }, 10)
         }
     }
 
-    private fun eventSettingBtn() {
-        binding.rightButton.setOnClickListener {
-            val intent = Intent(activity, SettingActivity::class.java)
-            startActivity(intent)
-        }
-
+    private fun eventProfileBtn() {
         binding.leftButton.setOnClickListener {
             val photoSave = AlertDialog.Builder(requireContext())
             var btnAction: DialogInterface.OnClickListener?
@@ -114,6 +122,13 @@ class MainFragment : Fragment() {
             photoSave.setNeutralButton("취소", btnAction)
 
             photoSave.show()
+        }
+    }
+
+    private fun eventSettingBtn() {
+        binding.rightButton.setOnClickListener {
+            val intent = Intent(activity, SettingActivity::class.java)
+            startActivity(intent)
         }
     }
 
@@ -143,6 +158,7 @@ class MainFragment : Fragment() {
             if (result.resultCode == Activity.RESULT_OK) {
                 val data: Intent? = result.data
                 val cropResult = CropImage.getActivityResult(data)
+                val keyEditor: SharedPreferences.Editor? = preferences?.edit()
                 cropResult.uri?.let { uri ->
                     Log.e("YMC", "이미지 선택: $uri")
                     if (whoImage == "boy") {
@@ -151,12 +167,18 @@ class MainFragment : Fragment() {
                                 .load(uri)
                                 .into(binding.mainBoyImage)
                         }, 10)
+
+                        keyEditor?.putString("boyImagePath", uri.toString())
+                        keyEditor?.commit()
                     } else {
                         Handler().postDelayed({
                             GlideApp.with(requireActivity())
                                 .load(uri)
                                 .into(binding.mainGirlImage)
                         }, 10)
+
+                        keyEditor?.putString("girlImagePath", uri.toString())
+                        keyEditor?.commit()
                     }
                 }
             } else if (result.resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
