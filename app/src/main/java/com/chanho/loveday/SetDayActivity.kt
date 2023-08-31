@@ -1,9 +1,7 @@
 package com.chanho.loveday
 
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.applikeysolutions.cosmocalendar.selection.OnDaySelectedListener
@@ -28,8 +26,22 @@ class SetDayActivity : AppCompatActivity() {
         binding = ActivitySetDayBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        loadingIndicator = binding.progressBar
+        setBtnEvent()
+        initCalendar()
+        initView()
+    }
 
+    private fun setBtnEvent() {
+        binding.bottomButton.setOnClickListener {
+            setSpecialDay()
+        }
+    }
+
+    private fun initView() {
+        loadingIndicator = binding.progressBar
+    }
+
+    private fun initCalendar() {
         binding.calendarView.selectionManager = SingleSelectionManager(OnDaySelectedListener {
             val year = binding.calendarView.selectedDays[0].calendar.weekYear
             selectedYear = year
@@ -41,13 +53,9 @@ class SetDayActivity : AppCompatActivity() {
             val formattedDate = String.format("%04d-%02d-%02d", year, month, day)
             datingDay = formattedDate
         })
-
-        binding.bottomButton.setOnClickListener {
-            setSpecialDay()
-        }
     }
 
-    fun setSpecialDay() {
+    private fun setSpecialDay() {
         MyApplication.prefs.setBoolean("isSet", true)
         MyApplication.prefs.setString("datingDay", datingDay)
 
@@ -55,7 +63,7 @@ class SetDayActivity : AppCompatActivity() {
         getSpecialInfo(datingDay)
     }
 
-    fun getDDay(year: Int, month: Int, day: Int) {
+    private fun getDDay(year: Int, month: Int, day: Int) {
         val selectedCalendar = Calendar.getInstance().apply {
             set(Calendar.YEAR, year)
             set(Calendar.MONTH, month - 1) // 0부터 시작하는 월을 반영하여 -1 해줍니다.
@@ -79,12 +87,10 @@ class SetDayActivity : AppCompatActivity() {
         MyApplication.prefs.setLong("ingDay", differenceInDays)
     }
 
-
-    fun getSpecialInfo(dday: String) {
+    private fun getSpecialInfo(dday: String) {
         val dateFormatter = SimpleDateFormat("yyyy-MM-dd")
         val startDate: Date = dateFormatter.parse(dday) ?: return
 
-        val calendar = Calendar.getInstance()
         val specialDDayCheck: MutableList<Map<String, Int>> = mutableListOf()
 
         // 100일 단위의 기념일 추출
@@ -123,7 +129,7 @@ class SetDayActivity : AppCompatActivity() {
         getValue(specialDDayCheck)
     }
 
-    fun getValue(specialDay: List<Map<String, Int>>) {
+    private fun getValue(specialDay: List<Map<String, Int>>) {
         val specialDate: MutableList<String> = mutableListOf()
         val specialDayName: MutableList<String> = mutableListOf()
 
@@ -144,12 +150,8 @@ class SetDayActivity : AppCompatActivity() {
         saveSpecialDay(specialDate, specialDayName)
     }
 
-    fun saveSpecialDay(specialDate: List<String>, specialDayName: List<String>) {
-        Log.d("specialDate:: ", specialDate.toString())
-        println("specialDayName::  $specialDayName")
-
+    private fun saveSpecialDay(specialDate: List<String>, specialDayName: List<String>) {
         val getKey = MyApplication.prefs.getString("privatekey", "")
-        println("getKey: $getKey")
 
         for (i in specialDate.indices) {
             val param = HashMap<String, Any>()
@@ -160,7 +162,7 @@ class SetDayActivity : AppCompatActivity() {
         }
     }
 
-    fun saveCalendar(data: HashMap<String, Any>) {
+    private fun saveCalendar(data: HashMap<String, Any>) {
         loadingIndicator.visibility = View.VISIBLE
 
         var count = 0
