@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.chanho.loveday.adapter.WpResidencePickerAdapter
+import com.chanho.loveday.application.MyApplication
 import com.chanho.loveday.databinding.FragmentDDayBinding
 import com.super_rabbit.wheel_picker.OnValueChangeListener
 import com.super_rabbit.wheel_picker.WheelPicker
@@ -31,7 +32,6 @@ class DDayFragment : Fragment() {
     private var param2: String? = null
 
     private lateinit var binding: FragmentDDayBinding
-    private var preferences: SharedPreferences? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,11 +47,8 @@ class DDayFragment : Fragment() {
     ): View? {
         binding = FragmentDDayBinding.inflate(inflater, container, false )
 
-        preferences = requireActivity().getSharedPreferences("setDDay", Context.MODE_PRIVATE)
-        val datingDay = preferences?.getString("datingDay", "")
-
+        val datingDay = MyApplication.prefs.getString("datingDay", "")
         getSpecialDDayInfo(datingDay)
-
 
         return binding.root
     }

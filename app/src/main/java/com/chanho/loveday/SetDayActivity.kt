@@ -5,21 +5,18 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import com.applikeysolutions.cosmocalendar.selection.OnDaySelectedListener
 import com.applikeysolutions.cosmocalendar.selection.SingleSelectionManager
+import com.chanho.loveday.application.MyApplication
 import com.chanho.loveday.databinding.ActivitySetDayBinding
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
 class SetDayActivity : AppCompatActivity() {
-
     private lateinit var binding: ActivitySetDayBinding
     private lateinit var loadingIndicator: View
-
-    private var preferences: SharedPreferences? = null
 
     var datingDay = ""
     var selectedYear = 2023
@@ -30,8 +27,6 @@ class SetDayActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySetDayBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        preferences = getSharedPreferences("setDDay", MODE_PRIVATE);
 
         loadingIndicator = binding.progressBar
 
@@ -53,11 +48,8 @@ class SetDayActivity : AppCompatActivity() {
     }
 
     fun setSpecialDay() {
-        val setEditor: SharedPreferences.Editor? = preferences?.edit()
-        setEditor?.putBoolean("isSet", true)
-
-        setEditor?.putString("datingDay", datingDay)
-        setEditor?.commit()
+        MyApplication.prefs.setBoolean("isSet", true)
+        MyApplication.prefs.setString("datingDay", datingDay)
 
         getDDay(selectedYear, selectedMonth, selectedDay)
         getSpecialInfo(datingDay)
@@ -84,9 +76,7 @@ class SetDayActivity : AppCompatActivity() {
         val differenceInMillis = today.timeInMillis - selectedCalendar.timeInMillis
         val differenceInDays = TimeUnit.MILLISECONDS.toDays(differenceInMillis) + 1
 
-        val setEditor: SharedPreferences.Editor? = preferences?.edit()
-        setEditor?.putLong("ingDay", differenceInDays)
-        setEditor?.apply()
+        MyApplication.prefs.setLong("ingDay", differenceInDays)
     }
 
 
@@ -155,11 +145,10 @@ class SetDayActivity : AppCompatActivity() {
     }
 
     fun saveSpecialDay(specialDate: List<String>, specialDayName: List<String>) {
-        // 저장 로직을 여기에 구현
         Log.d("specialDate:: ", specialDate.toString())
-        Log.d("specialDayName:: ", specialDayName.toString())
-        val getKey = preferences?.getString("privateKey", "") ?: ""
+        println("specialDayName::  $specialDayName")
 
+        val getKey = MyApplication.prefs.getString("privatekey", "")
         println("getKey: $getKey")
 
         for (i in specialDate.indices) {
@@ -176,19 +165,19 @@ class SetDayActivity : AppCompatActivity() {
 
         var count = 0
 
-        NetworkManager.postCalendarRequest(data,
-            {
-                count += 1
-                if (count > 18) {
-                    loadingIndicator.visibility = View.GONE
-                }
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
-                finish()
-            },
-            {
+        NetworkManager.postCalendarRequest(data, {
+            count += 1
+
+            if (count > 18) {
                 loadingIndicator.visibility = View.GONE
-            })
+            }
+
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        }, {
+            loadingIndicator.visibility = View.GONE
+        })
     }
 }
 

@@ -21,6 +21,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.chanho.loveday.application.MyApplication
 import com.chanho.loveday.databinding.FragmentMainBinding
 import com.theartofdev.edmodo.cropper.CropImage
 
@@ -39,7 +40,6 @@ class MainFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
-    private var preferences: SharedPreferences? = null
     private lateinit var binding: FragmentMainBinding
     var whoImage = "boy"
 
@@ -56,8 +56,6 @@ class MainFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentMainBinding.inflate(inflater, container, false)
 
-        preferences = requireActivity().getSharedPreferences("setDDay", Context.MODE_PRIVATE)
-
         eventProfileBtn()
         eventSettingBtn()
         setIngday()
@@ -67,13 +65,13 @@ class MainFragment : Fragment() {
     }
 
     private fun setIngday() {
-        val ingDay = preferences?.getLong("ingDay", 0)
+        val ingDay = MyApplication.prefs.getLong("ingDay", 0)
         binding.ingText.text = ingDay.toString() + "일째"
     }
 
     private fun setProfile() {
-        val boyImagePath = preferences?.getString("boyImagePath", "") ?: ""
-        val girlImagePath = preferences?.getString("girlImagePath", "") ?: ""
+        val boyImagePath = MyApplication.prefs.getString("boyImagePath", "")
+        val girlImagePath = MyApplication.prefs.getString("girlImagePath", "")
 
         if (boyImagePath != "") {
             Handler().postDelayed({
@@ -157,9 +155,9 @@ class MainFragment : Fragment() {
             if (result.resultCode == Activity.RESULT_OK) {
                 val data: Intent? = result.data
                 val cropResult = CropImage.getActivityResult(data)
-                val keyEditor: SharedPreferences.Editor? = preferences?.edit()
+
                 cropResult.uri?.let { uri ->
-                    Log.e("YMC", "이미지 선택: $uri")
+                    Log.e("IMAGE", "이미지 선택: $uri")
                     if (whoImage == "boy") {
                         Handler().postDelayed({
                             GlideApp.with(requireActivity())
@@ -167,17 +165,14 @@ class MainFragment : Fragment() {
                                 .into(binding.mainBoyImage)
                         }, 10)
 
-                        keyEditor?.putString("boyImagePath", uri.toString())
-                        keyEditor?.commit()
+                        MyApplication.prefs.setString("boyImagePath", uri.toString())
                     } else {
                         Handler().postDelayed({
                             GlideApp.with(requireActivity())
                                 .load(uri)
                                 .into(binding.mainGirlImage)
                         }, 10)
-
-                        keyEditor?.putString("girlImagePath", uri.toString())
-                        keyEditor?.commit()
+                        MyApplication.prefs.setString("girlImagePath", uri.toString())
                     }
                 }
             } else if (result.resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {

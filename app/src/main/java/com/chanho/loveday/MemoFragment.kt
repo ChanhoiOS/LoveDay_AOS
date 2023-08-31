@@ -15,6 +15,7 @@ import android.widget.TextView
 import android.widget.Toast
 import com.chanho.loveday.adapter.GridSpacingItemDecoration
 import com.chanho.loveday.adapter.MemoItemAdapter
+import com.chanho.loveday.application.MyApplication
 import com.chanho.loveday.databinding.FragmentMemoBinding
 import com.chanho.loveday.model.MemoModel
 import java.util.HashMap
@@ -33,10 +34,10 @@ class MemoFragment : Fragment(), MemoDataListener {
     private lateinit var binding: FragmentMemoBinding
     private var memoModelData: List<MemoModel>? = null
     lateinit var adapter: MemoItemAdapter
-    private var preferences: SharedPreferences? = null
-    val spanCount = 2 // 열의 개수
-    val spacing = 30 // 아이템 간격 (dp 단위)
-    val includeEdge = true // 가장자리에도 간격을 포함할지 여부
+
+    private val spanCount = 2 // 열의 개수
+    private val spacing = 30 // 아이템 간격 (dp 단위)
+    private val includeEdge = true // 가장자리에도 간격을 포함할지 여부
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,8 +51,6 @@ class MemoFragment : Fragment(), MemoDataListener {
 
         val itemDecoration = GridSpacingItemDecoration(spanCount, spacing, includeEdge)
         binding.memoRecyclerView.addItemDecoration(itemDecoration)
-
-        preferences = requireActivity().getSharedPreferences("setDDay", Context.MODE_PRIVATE)
 
         setData()
         swipeRefresh()
@@ -69,10 +68,7 @@ class MemoFragment : Fragment(), MemoDataListener {
             builder.setPositiveButton("등록") { dialog, _ ->
                 val enteredText = input.text.toString()
                 if (enteredText.isNotBlank()) {
-                    val getKey = preferences?.getString("partnerKey", "")
-                    val keyEditor: SharedPreferences.Editor? = preferences?.edit()
-                    keyEditor?.putString("partnerKey", enteredText)
-                    keyEditor?.commit()
+                    MyApplication.prefs.setString("partnerKey", enteredText)
 
                     registerKey(enteredText)
                 }
@@ -103,8 +99,8 @@ class MemoFragment : Fragment(), MemoDataListener {
     }
 
     private fun setData() {
-        val privateKey = preferences?.getString("privateKey", "") ?: ""
-        val partnerKey = preferences?.getString("partnerKey", "") ?: ""
+        val privateKey = MyApplication.prefs.getString("privateKey", "")
+        val partnerKey = MyApplication.prefs.getString("partnerKey", "")
 
         val param = HashMap<String, Any>()
         param["writer"] = privateKey
@@ -131,9 +127,9 @@ class MemoFragment : Fragment(), MemoDataListener {
     }
 
     override fun onMemoDataEntered(isEdit: Boolean, id: Int, title: String, content: String) {
-        val privateKey = preferences?.getString("privateKey", "") ?: ""
-        val param = HashMap<String, Any>()
+        val privateKey = MyApplication.prefs.getString("privateKey", "")
 
+        val param = HashMap<String, Any>()
 
         if (isEdit) {
             param["id"] = id
@@ -173,7 +169,7 @@ class MemoFragment : Fragment(), MemoDataListener {
     }
 
     fun moreAction(data: Map<String, Any>) {
-        val privateKey = preferences?.getString("privateKey", "") ?: ""
+        val privateKey = MyApplication.prefs.getString("privateKey", "")
 
         val momoDialog = AlertDialog.Builder(requireContext())
         momoDialog.setTitle("메모 관리")
@@ -226,7 +222,7 @@ class MemoFragment : Fragment(), MemoDataListener {
     }
 
     fun registerKey(partner: String) {
-        val privateKey = preferences?.getString("privateKey", "") ?: ""
+        val privateKey = MyApplication.prefs.getString("privateKey", "")
 
         val param = HashMap<String, Any>()
         param["partner"] = partner

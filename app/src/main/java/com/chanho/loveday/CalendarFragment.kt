@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import androidx.fragment.app.Fragment
+import com.chanho.loveday.application.MyApplication
 import com.chanho.loveday.databinding.FragmentCalendarBinding
 import com.chanho.loveday.model.CalendarModel
 import com.prolificinteractive.materialcalendarview.*
@@ -36,20 +37,13 @@ private const val ARG_PARAM2 = "param2"
 class CalendarFragment : Fragment() {
     private lateinit var binding: FragmentCalendarBinding
     private var calendarModelData: List<CalendarModel>? = null
-    private var preferences: SharedPreferences? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentCalendarBinding.inflate(inflater, container, false )
-
-        preferences = requireActivity().getSharedPreferences("setDDay", Context.MODE_PRIVATE)
 
         binding.calendarReloadButton.setOnClickListener {
             setData()
@@ -68,10 +62,7 @@ class CalendarFragment : Fragment() {
             builder.setPositiveButton("등록") { dialog, _ ->
                 val enteredText = input.text.toString()
                 if (enteredText.isNotBlank()) {
-                    val getKey = preferences?.getString("partnerKey", "")
-                    val keyEditor: SharedPreferences.Editor? = preferences?.edit()
-                    keyEditor?.putString("partnerKey", enteredText)
-                    keyEditor?.commit()
+                    MyApplication.prefs.setString("partnerKey", enteredText)
 
                     registerKey(enteredText)
                 }
@@ -126,8 +117,9 @@ class CalendarFragment : Fragment() {
     }
 
     private fun setData() {
-        val privateKey = preferences?.getString("privateKey", "") ?: ""
-        val partnerKey = preferences?.getString("partnerKey", "") ?: ""
+        val privateKey = MyApplication.prefs.getString("privateKey", "")
+        val partnerKey = MyApplication.prefs.getString("partnerKey", "")
+
         val param = HashMap<String, Any>()
         param["writer"] = privateKey
         if (partnerKey != "") {
@@ -180,7 +172,7 @@ class CalendarFragment : Fragment() {
     }
 
     private fun showTextInputPopup(specialDate: String) {
-        val privateKey = preferences?.getString("privateKey", "") ?: ""
+        val privateKey = MyApplication.prefs.getString("privateKey", "")
 
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("일정 등록")
@@ -212,7 +204,7 @@ class CalendarFragment : Fragment() {
     }
 
     private fun showDeleteConfirmationPopup(specialDate: String) {
-        val privateKey = preferences?.getString("privateKey", "") ?: ""
+        val privateKey = MyApplication.prefs.getString("privateKey", "")
 
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("기념일 삭제")
@@ -252,7 +244,7 @@ class CalendarFragment : Fragment() {
     }
 
     fun registerKey(partner: String) {
-        val privateKey = preferences?.getString("privateKey", "") ?: ""
+        val privateKey = MyApplication.prefs.getString("privateKey", "")
 
         val param = HashMap<String, Any>()
         param["partner"] = partner
