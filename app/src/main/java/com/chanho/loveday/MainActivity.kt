@@ -1,17 +1,15 @@
 package com.chanho.loveday
 
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
+import com.chanho.loveday.application.MyApplication
 import com.chanho.loveday.databinding.ActivityMainBinding
-
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private var preferences: SharedPreferences? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,11 +30,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initSharedPreference() {
-        preferences = getSharedPreferences("setDDay", MODE_PRIVATE);
+        val isSet = MyApplication.prefs.getBoolean("isSet", false)
 
-        val isSet = preferences?.getBoolean("isSet", false)
-
-        if (isSet == false) {
+        if (!isSet) {
             val intent = Intent(this, SetDayActivity::class.java)
             startActivity(intent)
             finish()
@@ -44,13 +40,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initPrivateKey() {
-        val getKey = preferences?.getString("privateKey", "")
-        val keyEditor: SharedPreferences.Editor? = preferences?.edit()
+        val getKey = MyApplication.prefs.getString("privateKey", "")
 
         if (getKey == "") {
             val randomString = generateRandomString(6)
-            keyEditor?.putString("privateKey", randomString)
-            keyEditor?.commit()
+            MyApplication.prefs.setString("privateKey", randomString)
         }
 
         println("privateKey: $getKey")
