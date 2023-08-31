@@ -9,6 +9,32 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 
+interface ApiService {
+    @POST("api/calendar")
+    fun saveCalendar(@Body data: HashMap<String, Any>): Call<Void>
+
+    @GET("api/calendar")
+    fun getCalendar(@QueryMap params: HashMap<String, Any>): Call<List<CalendarModel>>
+
+    @HTTP(method = "DELETE", path="api/calendar", hasBody = true)
+    fun deleteCalendar(@Body params: HashMap<String, Any>): Call<Void>
+
+    @GET("api/memo")
+    fun getMemo(@QueryMap params: HashMap<String, Any>): Call<List<MemoModel>>
+
+    @POST("api/memo")
+    fun saveMemo(@Body data: HashMap<String, Any>): Call<Void>
+
+    @HTTP(method = "DELETE", path="api/memo", hasBody = true)
+    fun deleteMemo(@Body params: HashMap<String, Any>): Call<Void>
+
+    @PUT("api/memo")
+    fun updateMemo(@Body data: HashMap<String, Any>): Call<Void>
+
+    @POST("api/partner")
+    fun postKey(@Body data: HashMap<String, Any>): Call<Void>
+}
+
 object NetworkManager {
     private val retrofit: Retrofit = Retrofit.Builder()
         .baseUrl("http://52.78.124.184:8080/") // API의 기본 URL 설정
@@ -164,28 +190,4 @@ object NetworkManager {
     }
 }
 
-interface ApiService {
-    @POST("api/calendar")
-    fun saveCalendar(@Body data: HashMap<String, Any>): Call<Void>
 
-    @GET("api/calendar")
-    fun getCalendar(@QueryMap params: HashMap<String, Any>): Call<List<CalendarModel>>
-
-    @HTTP(method = "DELETE", path="api/calendar", hasBody = true)
-    fun deleteCalendar(@Body params: HashMap<String, Any>): Call<Void>
-
-    @GET("api/memo")
-    fun getMemo(@QueryMap params: HashMap<String, Any>): Call<List<MemoModel>>
-
-    @POST("api/memo")
-    fun saveMemo(@Body data: HashMap<String, Any>): Call<Void>
-
-    @HTTP(method = "DELETE", path="api/memo", hasBody = true)
-    fun deleteMemo(@Body params: HashMap<String, Any>): Call<Void>
-
-    @PUT("api/memo")
-    fun updateMemo(@Body data: HashMap<String, Any>): Call<Void>
-
-    @POST("api/partner")
-    fun postKey(@Body data: HashMap<String, Any>): Call<Void>
-}

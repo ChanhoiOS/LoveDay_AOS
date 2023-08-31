@@ -49,12 +49,15 @@ class MemoFragment : Fragment(), MemoDataListener {
     ): View? {
         binding = FragmentMemoBinding.inflate(inflater, container, false )
 
-        val itemDecoration = GridSpacingItemDecoration(spanCount, spacing, includeEdge)
-        binding.memoRecyclerView.addItemDecoration(itemDecoration)
-
+        setRecyclerView()
         setData()
         swipeRefresh()
+        setBtnEvent()
 
+        return binding.root
+    }
+
+    private fun setBtnEvent() {
         binding.memoKeyButton.setOnClickListener {
 
             val builder = AlertDialog.Builder(requireContext())
@@ -87,8 +90,6 @@ class MemoFragment : Fragment(), MemoDataListener {
             memoTakeDialog.setMemoDataListener(this, false)
             memoTakeDialog.show(requireActivity().supportFragmentManager, "memo_take_dialog")
         }
-
-        return binding.root
     }
 
     private fun swipeRefresh() {
@@ -96,6 +97,11 @@ class MemoFragment : Fragment(), MemoDataListener {
             setData()
             binding.swipeLayout.isRefreshing = false
         }
+    }
+
+    private fun setRecyclerView() {
+        val itemDecoration = GridSpacingItemDecoration(spanCount, spacing, includeEdge)
+        binding.memoRecyclerView.addItemDecoration(itemDecoration)
     }
 
     private fun setData() {

@@ -115,12 +115,9 @@ class DDayFragment : Fragment() {
             }
         }
 
-        println("specialDDayCheck:: $specialDDayCheck")
-
         val specialDates = specialDDayCheck.map { it.keys.first() }
         val specialDatesArrayList: ArrayList<String> = ArrayList(specialDates)
         setPicker(specialDatesArrayList, specialDDayCheck)
-        println("specialDates:: $specialDates")
     }
 
     fun setPicker(specialDates: ArrayList<String>, specialDDayCheck: MutableList<Map<String, Int>>) {

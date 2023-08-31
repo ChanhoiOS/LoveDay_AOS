@@ -2,11 +2,9 @@ package com.chanho.loveday
 
 import android.app.AlertDialog
 import android.content.Context
-import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,11 +16,8 @@ import com.chanho.loveday.model.CalendarModel
 import com.prolificinteractive.materialcalendarview.*
 import com.prolificinteractive.materialcalendarview.format.ArrayWeekDayFormatter
 import com.prolificinteractive.materialcalendarview.format.MonthArrayTitleFormatter
-import com.prolificinteractive.materialcalendarview.format.TitleFormatter
 import com.prolificinteractive.materialcalendarview.spans.DotSpan
-import java.time.LocalDate
 import java.util.*
-
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -45,12 +40,19 @@ class CalendarFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentCalendarBinding.inflate(inflater, container, false )
 
+        setBtnEvent()
+        setCalendarEvent()
+        setData()
+
+        return binding.root
+    }
+
+    private fun setBtnEvent() {
         binding.calendarReloadButton.setOnClickListener {
             setData()
         }
 
         binding.calendarKeyButton.setOnClickListener {
-
             val builder = AlertDialog.Builder(requireContext())
             builder.setTitle("사랑의 키 등록")
             builder.setMessage("설정창에 있는 상대의 키를 등록하고 메모를 공유해요!")
@@ -75,7 +77,9 @@ class CalendarFragment : Fragment() {
 
             builder.show()
         }
+    }
 
+    private fun setCalendarEvent() {
         binding.calendarManageView.setOnDateChangedListener(object : OnDateSelectedListener {
             override fun onDateSelected(widget: MaterialCalendarView, date: CalendarDay, selected: Boolean) {
                 // 날짜 클릭 이벤트 처리
@@ -99,7 +103,7 @@ class CalendarFragment : Fragment() {
                     val contentForTargetDate = calendarModelData?.find { calendarModel ->
                         calendarModel.specialDate == selectedDate
                     }?.content
-                    
+
                     if (contentForTargetDate != null) {
                         showDeleteConfirmationPopup(selectedDate)
                         binding.calendarDayText.text = selectedDate
@@ -110,10 +114,6 @@ class CalendarFragment : Fragment() {
                 }
             }
         })
-
-        setData()
-
-        return binding.root
     }
 
     private fun setData() {
@@ -130,17 +130,17 @@ class CalendarFragment : Fragment() {
     }
 
     private fun fetchData(param: HashMap<String, Any>) {
-        NetworkManager.getCalendar(param, { data ->
+        NetworkManager.getCalendar(param) { data ->
             if (data != null) {
                 calendarModelData = data
                 addSpecialDateDecorators(data)
             } else {
                 // 데이터 가져오기 실패
             }
-        })
+        }
     }
 
-    fun addSpecialDateDecorators(calendarModels: List<CalendarModel>) {
+    private fun addSpecialDateDecorators(calendarModels: List<CalendarModel>) {
         val specialDates = extractSpecialDates(calendarModels)
         val eventDecorator = EventDecorator(requireContext(), Color.parseColor("#FF879B"), specialDates)
         binding.calendarManageView.removeDecorators()
@@ -152,7 +152,7 @@ class CalendarFragment : Fragment() {
 
     }
 
-    fun extractSpecialDates(calendarModels: List<CalendarModel>): Set<CalendarDay> {
+    private fun extractSpecialDates(calendarModels: List<CalendarModel>): Set<CalendarDay> {
         val specialDates = mutableSetOf<CalendarDay>()
 
         for (model in calendarModels) {
@@ -225,7 +225,7 @@ class CalendarFragment : Fragment() {
         builder.show()
     }
 
-    fun postCalendar(data: HashMap<String, Any>) {
+    private fun postCalendar(data: HashMap<String, Any>) {
         NetworkManager.postCalendarRequest(data,
             {
                 setData()
@@ -235,7 +235,7 @@ class CalendarFragment : Fragment() {
             })
     }
 
-    fun deleteCalendar(data: HashMap<String, Any>) {
+    private fun deleteCalendar(data: HashMap<String, Any>) {
         NetworkManager.deleteCalendar(data, {
             setData()
         }) {
@@ -243,7 +243,7 @@ class CalendarFragment : Fragment() {
         }
     }
 
-    fun registerKey(partner: String) {
+    private fun registerKey(partner: String) {
         val privateKey = MyApplication.prefs.getString("privateKey", "")
 
         val param = HashMap<String, Any>()
@@ -280,7 +280,6 @@ class CalendarFragment : Fragment() {
 }
 
 class EventDecorator : DayViewDecorator {
-
     private var color = 0
     private lateinit var dates: HashSet<CalendarDay>
     private val drawable: Drawable?
