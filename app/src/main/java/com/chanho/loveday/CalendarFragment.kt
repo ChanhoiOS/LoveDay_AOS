@@ -2,6 +2,7 @@ package com.chanho.loveday
 
 import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -9,6 +10,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.Toast
+import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import com.chanho.loveday.application.MyApplication
 import com.chanho.loveday.databinding.FragmentCalendarBinding
@@ -32,6 +35,8 @@ private const val ARG_PARAM2 = "param2"
 class CalendarFragment : Fragment() {
     private lateinit var binding: FragmentCalendarBinding
     private var calendarModelData: List<CalendarModel>? = null
+    private var editWriter = ""
+    private var editCalendar = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +44,8 @@ class CalendarFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentCalendarBinding.inflate(inflater, container, false )
+
+        binding.calendarEditBtn.visibility = View.GONE
 
         setBtnEvent()
         setCalendarEvent()
@@ -48,6 +55,8 @@ class CalendarFragment : Fragment() {
     }
 
     private fun setBtnEvent() {
+        val privateKey = MyApplication.prefs.getString("privateKey", "")
+
         binding.calendarReloadButton.setOnClickListener {
             setData()
         }
@@ -77,6 +86,43 @@ class CalendarFragment : Fragment() {
 
             builder.show()
         }
+
+        binding.calendarEditBtn.setOnClickListener {
+            val dialog = AlertDialog.Builder(requireContext())
+            dialog.setTitle("일정 수정")
+
+            var btnAction: DialogInterface.OnClickListener?
+            btnAction = DialogInterface.OnClickListener { _, _ ->
+                if (editWriter == privateKey) {
+                    showUpdateInputPopup(true, editCalendar)
+                } else {
+                    showUpdateInputPopup(false, editCalendar)
+                }
+            }
+
+            dialog.setPositiveButton("수정", btnAction)
+
+            btnAction = DialogInterface.OnClickListener { _, _ ->
+                if (editWriter == privateKey) {
+                    showDeleteConfirmationPopup(editCalendar)
+                } else {
+                    print("editWriter $editWriter")
+                    print("privateKey $privateKey")
+                    Toast.makeText(requireContext(), "상대방에 의해 작성된 일정은 삭제할 수 없습니다.", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            dialog.setNegativeButton("삭제", btnAction)
+
+            btnAction = DialogInterface.OnClickListener { _, _ ->
+                println("취소")
+            }
+            dialog.setNeutralButton("취소", btnAction)
+
+            dialog.show()
+        }
+
+
     }
 
     private fun setCalendarEvent() {
@@ -104,11 +150,19 @@ class CalendarFragment : Fragment() {
                         calendarModel.specialDate == selectedDate
                     }?.content
 
+                    val writerForTargetDate = calendarModelData?.find { calendarModel ->
+                        calendarModel.specialDate == selectedDate
+                    }?.writer
+
+                    editWriter = writerForTargetDate ?: ""
+                    editCalendar = selectedDate
+
                     if (contentForTargetDate != null) {
-                        showDeleteConfirmationPopup(selectedDate)
+                        binding.calendarEditBtn.visibility = View.VISIBLE
                         binding.calendarDayText.text = selectedDate
                         binding.calendarDayContent.text = contentForTargetDate
                     } else {
+                        binding.calendarEditBtn.visibility = View.GONE
                         showTextInputPopup(selectedDate)
                     }
                 }
@@ -134,6 +188,12 @@ class CalendarFragment : Fragment() {
             if (data != null) {
                 calendarModelData = data
                 addSpecialDateDecorators(data)
+
+                val contentForTargetDate = calendarModelData?.find { calendarModel ->
+                    calendarModel.specialDate == editCalendar
+                }?.content
+
+                binding.calendarDayContent.text = contentForTargetDate
             } else {
                 // 데이터 가져오기 실패
             }
@@ -225,6 +285,42 @@ class CalendarFragment : Fragment() {
         builder.show()
     }
 
+    private fun showUpdateInputPopup(isMe: Boolean, specialDate: String) {
+        val privateKey = MyApplication.prefs.getString("privateKey", "")
+        val partnerKey = MyApplication.prefs.getString("partnerKey", "")
+
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("일정 수정")
+
+        val input = EditText(requireContext())
+        input.hint = "수정할 내용을 입력하세요."
+        builder.setView(input)
+
+        builder.setPositiveButton("저장") { dialog, _ ->
+            val enteredText = input.text.toString()
+
+            if (enteredText.isNotBlank()) {
+                val param = HashMap<String, Any>()
+                param["specialDate"] = specialDate
+                param["content"] = enteredText
+                if (isMe) {
+                    param["writer"] = privateKey
+                } else {
+                    param["writer"] = partnerKey
+                }
+
+                updateCalendar(param)
+            }
+            dialog.dismiss()
+        }
+
+        builder.setNegativeButton("취소") { dialog, _ ->
+            dialog.cancel()
+        }
+
+        builder.show()
+    }
+
     private fun postCalendar(data: HashMap<String, Any>) {
         NetworkManager.postCalendarRequest(data,
             {
@@ -237,6 +333,14 @@ class CalendarFragment : Fragment() {
 
     private fun deleteCalendar(data: HashMap<String, Any>) {
         NetworkManager.deleteCalendar(data, {
+            setData()
+        }) {
+
+        }
+    }
+
+    private fun updateCalendar(data: HashMap<String, Any>) {
+        NetworkManager.updateCalendar(data, {
             setData()
         }) {
 

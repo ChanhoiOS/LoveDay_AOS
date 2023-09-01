@@ -19,6 +19,9 @@ interface ApiService {
     @HTTP(method = "DELETE", path="api/calendar", hasBody = true)
     fun deleteCalendar(@Body params: HashMap<String, Any>): Call<Void>
 
+    @PUT("api/calendar")
+    fun updateCalendar(@Body data: HashMap<String, Any>): Call<Void>
+
     @GET("api/memo")
     fun getMemo(@QueryMap params: HashMap<String, Any>): Call<List<MemoModel>>
 
@@ -92,6 +95,25 @@ object NetworkManager {
             }
 
             override fun onFailure(call: Call<Void>, t: Throwable) {
+                failure()
+            }
+        })
+    }
+
+    fun updateCalendar(data: HashMap<String, Any>, success: () -> Unit, failure: () -> Unit) {
+        apiService.updateCalendar(data).enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                if (response.isSuccessful) {
+                    println("update Success")
+                    success()
+                } else {
+                    println("update Fail")
+                    failure()
+                }
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                println("Network Error: ${t.message}")
                 failure()
             }
         })
