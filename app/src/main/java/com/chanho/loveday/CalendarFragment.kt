@@ -188,15 +188,22 @@ class CalendarFragment : Fragment() {
             if (data != null) {
                 calendarModelData = data
                 addSpecialDateDecorators(data)
-
-                val contentForTargetDate = calendarModelData?.find { calendarModel ->
-                    calendarModel.specialDate == editCalendar
-                }?.content
-
-                binding.calendarDayContent.text = contentForTargetDate
+                setCalendarContent()
             } else {
                 // 데이터 가져오기 실패
             }
+        }
+    }
+
+    private fun setCalendarContent() {
+        val contentForTargetDate = calendarModelData?.find { calendarModel ->
+            calendarModel.specialDate == editCalendar
+        }?.content
+
+        if (contentForTargetDate != null) {
+            binding.calendarDayContent.text = contentForTargetDate
+        } else {
+            binding.calendarDayContent.text = "메모 내용"
         }
     }
 
