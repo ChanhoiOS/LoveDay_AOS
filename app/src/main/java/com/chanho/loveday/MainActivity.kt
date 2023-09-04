@@ -2,6 +2,7 @@ package com.chanho.loveday
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
@@ -17,8 +18,8 @@ class MainActivity : AppCompatActivity() {
 
         initBinding()
         initNavigation()
-        initSharedPreference()
         initPrivateKey()
+        initSharedPreference()
 
         MyFirebaseMessagingService().getFirebaseToken()
     }
@@ -50,7 +51,7 @@ class MainActivity : AppCompatActivity() {
             MyApplication.prefs.setString("privateKey", randomString)
         }
 
-        println("privateKey: $getKey")
+        Log.d("privateKey: " ,getKey)
     }
 
     private fun generateRandomString(length: Int): String {
