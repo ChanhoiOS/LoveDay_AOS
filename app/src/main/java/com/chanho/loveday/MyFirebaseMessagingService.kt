@@ -44,14 +44,14 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         Log.d(TAG, "Message data : ${remoteMessage.data}")
         Log.d(TAG, "Message noti : ${remoteMessage.notification}")
 
-      //  if(!remoteMessage.data.isEmpty()){
+        if(!remoteMessage.data.isEmpty()){
             //알림생성
             sendNotification(remoteMessage)
-//            Log.d(TAG, remoteMessage.data["title"].toString())
-//            Log.d(TAG, remoteMessage.data["body"].toString())
-//        }else {
-//            Log.e(TAG, "data가 비어있습니다. 메시지를 수신하지 못했습니다.")
-//        }
+            Log.d(TAG, remoteMessage.data["title"].toString())
+            Log.d(TAG, remoteMessage.data["body"].toString())
+        }else {
+            Log.e(TAG, "data가 비어있습니다. 메시지를 수신하지 못했습니다.")
+        }
     }
 
     /** 알림 생성 메서드 */
