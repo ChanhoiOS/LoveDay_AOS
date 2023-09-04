@@ -153,6 +153,7 @@ class MemoFragment : Fragment(), MemoDataListener {
     private fun registerMemo(data: HashMap<String, Any>) {
         NetworkManager.postMemoRequest(data, {
             setData()
+            postNoti()
         }, {
 
         })
@@ -241,6 +242,17 @@ class MemoFragment : Fragment(), MemoDataListener {
             binding.memoKeyButton.setImageResource(R.drawable.main_heart_middle)
         }) {
             println("키등록 실패")
+        }
+    }
+
+    private fun postNoti() {
+        val partnerKey = MyApplication.prefs.getString("partnerKey", "")
+        val param = HashMap<String, Any>()
+        param["partner"] = partnerKey
+        NetworkManager.memoNoti(param, {
+
+        }) {
+
         }
     }
 

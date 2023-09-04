@@ -332,6 +332,7 @@ class CalendarFragment : Fragment() {
         NetworkManager.postCalendarRequest(data,
             {
                 setData()
+                postNoti()
             },
             {
                 // 실패 처리 로직을 여기에 작성합니다.
@@ -368,6 +369,17 @@ class CalendarFragment : Fragment() {
             binding.calendarKeyButton.setImageResource(R.drawable.main_heart_middle)
         }) {
             println("키등록 실패")
+        }
+    }
+
+    private fun postNoti() {
+        val partnerKey = MyApplication.prefs.getString("partnerKey", "")
+        val param = HashMap<String, Any>()
+        param["partner"] = partnerKey
+        NetworkManager.calendarNoti(param, {
+
+        }) {
+
         }
     }
 

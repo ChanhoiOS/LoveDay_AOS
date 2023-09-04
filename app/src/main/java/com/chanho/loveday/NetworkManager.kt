@@ -36,6 +36,12 @@ interface ApiService {
 
     @POST("api/partner")
     fun postKey(@Body data: HashMap<String, Any>): Call<Void>
+
+    @POST("api/calendarNoti")
+    fun calendarNoti(@Body data: HashMap<String, Any>): Call<Void>
+
+    @POST("api/memoNoti")
+    fun memoNoti(@Body data: HashMap<String, Any>): Call<Void>
 }
 
 object NetworkManager {
@@ -194,6 +200,44 @@ object NetworkManager {
 
     fun postKey(data: HashMap<String, Any>, success: () -> Unit, failure: () -> Unit) {
         apiService.postKey(data).enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                if (response.isSuccessful) {
+                    println("Key Success")
+                    success()
+                } else {
+                    println("Key Fail")
+                    failure()
+                }
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                println("Network Error: ${t.message}")
+                failure()
+            }
+        })
+    }
+
+    fun calendarNoti(data: HashMap<String, Any>, success: () -> Unit, failure: () -> Unit) {
+        apiService.calendarNoti(data).enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                if (response.isSuccessful) {
+                    println("Key Success")
+                    success()
+                } else {
+                    println("Key Fail")
+                    failure()
+                }
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                println("Network Error: ${t.message}")
+                failure()
+            }
+        })
+    }
+
+    fun memoNoti(data: HashMap<String, Any>, success: () -> Unit, failure: () -> Unit) {
+        apiService.memoNoti(data).enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if (response.isSuccessful) {
                     println("Key Success")
