@@ -1,42 +1,42 @@
 {
   "project_info": {
-    "project_number": "12158203247",
-    "project_id": "loveday-android",
-    "storage_bucket": "loveday-android.appspot.com"
+    "project_number": "132832644605",
+    "project_id": "loveday-3dc8d",
+    "storage_bucket": "loveday-3dc8d.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:12158203247:android:aba66493ea51f3e824249a",
+        "mobilesdk_app_id": "1:132832644605:android:7affb29a78a35cec629d94",
         "android_client_info": {
           "package_name": "com.chanho.loveday"
         }
       },
       "oauth_client": [
         {
-          "client_id": "12158203247-m6h3bg8jdtmp741r55ce9vlvmp21lv90.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.chanho.loveday",
-            "certificate_hash": "10c7388b68be30716b29a3cde32ce880e9a6f330"
-          }
-        },
-        {
-          "client_id": "12158203247-mhcr5k76vrvpo6rvgvh2bdq1jfg7eb5t.apps.googleusercontent.com",
+          "client_id": "132832644605-554drl8f98fieu304tnm3o08d6ef2hn4.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDIIKKcXDvOZ0N5sZQajtzG48OnT-BJIo8"
+          "current_key": "AIzaSyDjQj6NQfI2htaJPK0KwYm6qTpD8K9bjE4"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "12158203247-mhcr5k76vrvpo6rvgvh2bdq1jfg7eb5t.apps.googleusercontent.com",
+              "client_id": "132832644605-554drl8f98fieu304tnm3o08d6ef2hn4.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "132832644605-q6pjk3apa9tu1plojorfg1ldjqbd67d1.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.chanho.LoveDay",
+                "app_store_id": "1658302896"
+              }
             }
           ]
         }
