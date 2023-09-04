@@ -151,7 +151,7 @@ class SetDayActivity : AppCompatActivity() {
     }
 
     private fun saveSpecialDay(specialDate: List<String>, specialDayName: List<String>) {
-        val getKey = MyApplication.prefs.getString("privatekey", "")
+        val getKey = MyApplication.prefs.getString("privateKey", "")
 
         for (i in specialDate.indices) {
             val param = HashMap<String, Any>()
