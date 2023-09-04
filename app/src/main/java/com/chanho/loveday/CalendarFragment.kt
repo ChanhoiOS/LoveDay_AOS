@@ -356,10 +356,12 @@ class CalendarFragment : Fragment() {
 
     private fun registerKey(partner: String) {
         val privateKey = MyApplication.prefs.getString("privateKey", "")
+        val token = MyApplication.prefs.getString("fcmToken", "")
 
         val param = HashMap<String, Any>()
         param["partner"] = partner
         param["writer"] = privateKey
+        param["token"] = token
 
         NetworkManager.postKey(param, {
             setData()

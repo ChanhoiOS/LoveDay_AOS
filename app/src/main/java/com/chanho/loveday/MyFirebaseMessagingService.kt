@@ -9,6 +9,7 @@ import android.media.RingtoneManager
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import com.chanho.loveday.application.MyApplication
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
@@ -24,11 +25,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     override fun onNewToken(token: String) {
         Log.d(TAG, "new Token: $token")
 
-        // 토큰 값을 따로 저장
-        val pref = this.getSharedPreferences("token", Context.MODE_PRIVATE)
-        val editor = pref.edit()
-        editor.putString("token", token).apply()
-        editor.commit()
+        MyApplication.prefs.setString("fcmToken", token)
+
         Log.i(TAG, "성공적으로 토큰을 저장함")
     }
 
@@ -44,14 +42,16 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         Log.d(TAG, "Message data : ${remoteMessage.data}")
         Log.d(TAG, "Message noti : ${remoteMessage.notification}")
 
-        if(!remoteMessage.data.isEmpty()){
-            //알림생성
-            sendNotification(remoteMessage)
-            Log.d(TAG, remoteMessage.data["title"].toString())
-            Log.d(TAG, remoteMessage.data["body"].toString())
-        }else {
-            Log.e(TAG, "data가 비어있습니다. 메시지를 수신하지 못했습니다.")
-        }
+        sendNotification(remoteMessage)
+
+//        if(!remoteMessage.data.isEmpty()){
+//            //알림생성
+//
+//            Log.d(TAG, remoteMessage.data["title"].toString())
+//            Log.d(TAG, remoteMessage.data["body"].toString())
+//        }else {
+//            Log.e(TAG, "data가 비어있습니다. 메시지를 수신하지 못했습니다.")
+//        }
     }
 
     /** 알림 생성 메서드 */
