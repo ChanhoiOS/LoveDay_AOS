@@ -34,6 +34,7 @@ private const val ARG_PARAM2 = "param2"
  */
 class CalendarFragment : Fragment() {
     private lateinit var binding: FragmentCalendarBinding
+    private lateinit var loadingIndicator: View
     private var calendarModelData: List<CalendarModel>? = null
     private var editWriter = ""
     private var editCalendar = ""
@@ -50,14 +51,20 @@ class CalendarFragment : Fragment() {
         setBtnEvent()
         setCalendarEvent()
         setData()
+        initView()
 
         return binding.root
+    }
+
+    private fun initView() {
+        loadingIndicator = binding.calendarProgressBar
     }
 
     private fun setBtnEvent() {
         val privateKey = MyApplication.prefs.getString("privateKey", "")
 
         binding.calendarReloadButton.setOnClickListener {
+            loadingIndicator.visibility = View.VISIBLE
             setData()
         }
 
@@ -192,6 +199,7 @@ class CalendarFragment : Fragment() {
             } else {
                 // 데이터 가져오기 실패
             }
+            loadingIndicator.visibility = View.GONE
         }
     }
 
