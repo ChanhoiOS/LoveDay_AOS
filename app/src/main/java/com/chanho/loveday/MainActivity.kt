@@ -7,6 +7,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.chanho.loveday.application.MyApplication
 import com.chanho.loveday.databinding.ActivityMainBinding
+import java.sql.DriverManager.println
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -18,6 +19,8 @@ class MainActivity : AppCompatActivity() {
         initNavigation()
         initSharedPreference()
         initPrivateKey()
+
+        MyFirebaseMessagingService().getFirebaseToken()
     }
 
     private fun initBinding() {

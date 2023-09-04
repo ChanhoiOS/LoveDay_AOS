@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "12158203247",
+    "project_id": "loveday-android",
+    "storage_bucket": "loveday-android.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:12158203247:android:aba66493ea51f3e824249a",
+        "android_client_info": {
+          "package_name": "com.chanho.loveday"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "12158203247-m6h3bg8jdtmp741r55ce9vlvmp21lv90.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.chanho.loveday",
+            "certificate_hash": "10c7388b68be30716b29a3cde32ce880e9a6f330"
+          }
+        },
+        {
+          "client_id": "12158203247-mhcr5k76vrvpo6rvgvh2bdq1jfg7eb5t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDIIKKcXDvOZ0N5sZQajtzG48OnT-BJIo8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "12158203247-mhcr5k76vrvpo6rvgvh2bdq1jfg7eb5t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
