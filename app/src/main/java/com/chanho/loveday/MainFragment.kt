@@ -24,6 +24,8 @@ import androidx.fragment.app.Fragment
 import com.chanho.loveday.application.MyApplication
 import com.chanho.loveday.databinding.FragmentMainBinding
 import com.theartofdev.edmodo.cropper.CropImage
+import java.util.*
+import java.util.concurrent.TimeUnit
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -58,15 +60,32 @@ class MainFragment : Fragment() {
 
         eventProfileBtn()
         eventSettingBtn()
-        setIngday()
         setProfile()
 
         return binding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        setIngday()
+        Log.d("호출", "호출 ㅎ")
+    }
+
     private fun setIngday() {
-        val ingDay = MyApplication.prefs.getLong("ingDay", 0)
-        binding.ingText.text = ingDay.toString() + "일째"
+        val datingDay = MyApplication.prefs.getString("datingDay", "2023-01-01")
+
+        // "-"를 구분자로 사용하여 문자열을 분리
+        val parts = datingDay.split("-")
+
+        if (parts.size == 3) {
+            val extractedYear = parts[0].toInt()
+            val extractedMonth = parts[1].toInt()
+            val extractedDay = parts[2].toInt()
+
+            var ingDay = getDDay(extractedYear, extractedMonth, extractedDay)
+
+            binding.ingText.text = ingDay + "일째"
+        }
     }
 
     private fun setProfile() {
@@ -211,6 +230,30 @@ class MainFragment : Fragment() {
                 // 권한이 거부된 경우에 대한 처리
             }
         }
+    }
+
+    private fun getDDay(year: Int, month: Int, day: Int): String {
+        val selectedCalendar = Calendar.getInstance().apply {
+            set(Calendar.YEAR, year)
+            set(Calendar.MONTH, month - 1) // 0부터 시작하는 월을 반영하여 -1 해줍니다.
+            set(Calendar.DAY_OF_MONTH, day)
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }
+
+        val today = Calendar.getInstance().apply {
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }
+
+        val differenceInMillis = today.timeInMillis - selectedCalendar.timeInMillis
+        val differenceInDays = TimeUnit.MILLISECONDS.toDays(differenceInMillis) + 1
+
+        return differenceInDays.toString()
     }
 
     companion object {
