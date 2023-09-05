@@ -68,7 +68,6 @@ class MainFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         setIngday()
-        Log.d("호출", "호출 ㅎ")
     }
 
     private fun setIngday() {
