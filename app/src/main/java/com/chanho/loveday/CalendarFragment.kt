@@ -161,7 +161,7 @@ class CalendarFragment : Fragment() {
                         calendarModel.specialDate == selectedDate
                     }?.writer
 
-                    editWriter = writerForTargetDate ?: ""
+                    editWriter = writerForTargetDate?.writer ?: ""
                     editCalendar = selectedDate
 
                     if (contentForTargetDate != null) {
