@@ -33,7 +33,7 @@ class SetDayActivity : AppCompatActivity() {
 
     private fun setBtnEvent() {
         binding.bottomButton.setOnClickListener {
-            setSpecialDay()
+            setUserInfo()
         }
     }
 
@@ -53,6 +53,21 @@ class SetDayActivity : AppCompatActivity() {
             val formattedDate = String.format("%04d-%02d-%02d", year, month, day)
             datingDay = formattedDate
         })
+    }
+
+    private fun setUserInfo() {
+        val getKey = MyApplication.prefs.getString("privateKey", "")
+        val token = MyApplication.prefs.getString("fcmToken", "")
+
+        val param = HashMap<String, Any>()
+        param["writer"] = getKey
+        param["token"] = token
+
+        NetworkManager.signUp(param, {
+            setSpecialDay()
+        }) {
+            println("회원가입 실패")
+        }
     }
 
     private fun setSpecialDay() {
