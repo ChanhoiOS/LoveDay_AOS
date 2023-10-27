@@ -35,7 +35,7 @@ interface ApiService {
     fun updateMemo(@Body data: HashMap<String, Any>): Call<Void>
 
     @POST("api/partner")
-    fun postKey(@Body data: HashMap<String, Any>): Call<Void>
+    fun registerPartner(@Body data: HashMap<String, Any>): Call<Void>
 
     @POST("api/user")
     fun signUp(@Body data: HashMap<String, Any>): Call<Void>
@@ -220,8 +220,8 @@ object NetworkManager {
         })
     }
 
-    fun postKey(data: HashMap<String, Any>, success: () -> Unit, failure: () -> Unit) {
-        apiService.postKey(data).enqueue(object : Callback<Void> {
+    fun registerPartner(data: HashMap<String, Any>, success: () -> Unit, failure: () -> Unit) {
+        apiService.registerPartner(data).enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if (response.isSuccessful) {
                     println("Key Success")

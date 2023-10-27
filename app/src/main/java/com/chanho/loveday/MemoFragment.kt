@@ -237,7 +237,7 @@ class MemoFragment : Fragment(), MemoDataListener {
         param["writer"] = privateKey
         param["token"] = token
 
-        NetworkManager.postKey(param, {
+        NetworkManager.registerPartner(param, {
             setData()
             binding.memoKeyButton.setImageResource(R.drawable.main_heart_middle)
         }) {
