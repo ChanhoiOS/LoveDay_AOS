@@ -9,6 +9,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.provider.MediaStore
@@ -61,6 +62,7 @@ class MainFragment : Fragment() {
         eventProfileBtn()
         eventSettingBtn()
         setProfile()
+        checkAppPushNotification()
 
         return binding.root
     }
@@ -228,6 +230,28 @@ class MainFragment : Fragment() {
             } else {
                 // 권한이 거부된 경우에 대한 처리
             }
+        }
+    }
+
+    private fun checkAppPushNotification() {
+        //Android 13 이상 && 푸시권한 없음
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+            && PackageManager.PERMISSION_DENIED == ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.POST_NOTIFICATIONS)) {
+            // 푸쉬 권한 없음
+            permissionPostNotification.launch(Manifest.permission.POST_NOTIFICATIONS)
+            return
+        }
+
+        //권한이 있을때
+
+    }
+
+    /** 권한 요청 */
+    private val permissionPostNotification = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+        if (isGranted) {
+            //권한 허용
+        } else {
+            //권한 비허용
         }
     }
 
