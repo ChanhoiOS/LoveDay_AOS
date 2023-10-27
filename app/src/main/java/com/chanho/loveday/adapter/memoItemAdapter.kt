@@ -34,7 +34,7 @@ class MemoItemAdapter(val fragment: Fragment, val memoList: List<MemoModel>?): R
 
         holder.editBtn.setOnClickListener {
             var id = memoList?.get(position)?.id ?: ""
-            var writer = memoList?.get(position)?.writer ?: ""
+            var writer = memoList?.get(position)?.writer?.writer ?: ""
             var title = memoList?.get(position)?.title ?: "title"
             var content = memoList?.get(position)?.content ?: "content"
 
