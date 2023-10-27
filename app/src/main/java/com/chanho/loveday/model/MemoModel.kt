@@ -4,5 +4,7 @@ data class MemoModel(
     val id: Int?,
     val title: String?,
     val content: String?,
-    val writer: String?
+    val writer: Writer?,
+    val createAt: String?,
+    val updatedAt: String?
 )
