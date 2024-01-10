@@ -1,4 +1,4 @@
-package com.chanho.loveday
+package com.chanho.loveday.noti
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -9,6 +9,8 @@ import android.media.RingtoneManager
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import com.chanho.loveday.MainActivity
+import com.chanho.loveday.R
 import com.chanho.loveday.application.MyApplication
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingService

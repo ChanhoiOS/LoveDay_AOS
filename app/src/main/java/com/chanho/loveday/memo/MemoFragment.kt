@@ -1,18 +1,18 @@
-package com.chanho.loveday
+package com.chanho.loveday.memo
 
 import android.app.AlertDialog
-import android.content.Context
 import android.content.DialogInterface
-import android.content.SharedPreferences
-import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
+import com.chanho.loveday.MemoDataListener
+import com.chanho.loveday.MemoWriteFragment
+import com.chanho.loveday.NetworkManager
+import com.chanho.loveday.R
 import com.chanho.loveday.adapter.GridSpacingItemDecoration
 import com.chanho.loveday.adapter.MemoItemAdapter
 import com.chanho.loveday.application.MyApplication

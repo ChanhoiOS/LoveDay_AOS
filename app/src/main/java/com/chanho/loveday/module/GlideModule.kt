@@ -1,4 +1,4 @@
-package com.chanho.loveday
+package com.chanho.loveday.module
 
 import com.bumptech.glide.annotation.GlideModule
 import com.bumptech.glide.module.AppGlideModule

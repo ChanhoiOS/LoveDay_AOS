@@ -8,8 +8,7 @@
     android:layout_height="match_parent"
     android:background="#FFFFFF"
     android:clickable="true"
-    android:splitMotionEvents="false"
-    tools:context=".DDayFragment">
+    android:splitMotionEvents="false">
 
     <TextView
         android:id="@+id/ddayTitle"

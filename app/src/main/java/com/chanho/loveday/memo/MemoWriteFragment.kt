@@ -1,9 +1,7 @@
 package com.chanho.loveday
 
-import android.os.Build
 import android.os.Bundle
 import android.view.*
-import com.chanho.loveday.databinding.FragmentMemoBinding
 import com.chanho.loveday.databinding.MemoWriteViewBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 

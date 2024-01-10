@@ -49,7 +49,7 @@ interface ApiService {
 
 object NetworkManager {
     private val retrofit: Retrofit = Retrofit.Builder()
-        .baseUrl("http://52.78.124.184:8080/") // API의 기본 URL 설정
+        .baseUrl("http://couplespace.shop:8080/") // API의 기본 URL 설정
         .addConverterFactory(GsonConverterFactory.create()) // JSON 변환기 추가
         .build()
 

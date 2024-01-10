@@ -1,12 +1,11 @@
-package com.chanho.loveday
+package com.chanho.loveday.dday
 
-import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.chanho.loveday.R
 import com.chanho.loveday.adapter.WpResidencePickerAdapter
 import com.chanho.loveday.application.MyApplication
 import com.chanho.loveday.databinding.FragmentDDayBinding

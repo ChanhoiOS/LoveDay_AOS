@@ -7,13 +7,13 @@
 
     <fragment
         android:id="@+id/ddayFragment"
-        android:name="com.chanho.loveday.DDayFragment"
+        android:name="com.chanho.loveday.dday.DDayFragment"
         android:label="ddayFragment"
         tools:layout="@layout/fragment_d_day" />
 
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.chanho.loveday.MainFragment"
+        android:name="com.chanho.loveday.main.MainFragment"
         android:label="mainFragment"
         tools:layout="@layout/fragment_main" />
 
@@ -25,7 +25,7 @@
 
     <fragment
         android:id="@+id/memoFragment"
-        android:name="com.chanho.loveday.MemoFragment"
+        android:name="com.chanho.loveday.memo.MemoFragment"
         android:label="memoFragment"
         tools:layout="@layout/fragment_memo" />
 

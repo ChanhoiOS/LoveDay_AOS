@@ -11,8 +11,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
-import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
+import com.chanho.loveday.NetworkManager
 import com.chanho.loveday.application.MyApplication
 import com.chanho.loveday.databinding.FragmentCalendarBinding
 import com.chanho.loveday.model.CalendarModel

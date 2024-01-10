@@ -3,13 +3,11 @@ package com.chanho.loveday.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
-import com.chanho.loveday.MemoFragment
+import com.chanho.loveday.memo.MemoFragment
 import com.chanho.loveday.R
 import com.chanho.loveday.model.MemoModel
 import java.util.HashMap
