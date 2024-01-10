@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
 import com.chanho.loveday.R
 import com.chanho.loveday.adapter.WpResidencePickerAdapter
 import com.chanho.loveday.application.MyApplication
@@ -31,6 +32,7 @@ class DDayFragment : Fragment() {
     private var param2: String? = null
 
     private lateinit var binding: FragmentDDayBinding
+    private lateinit var viewModel: DDayViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +47,7 @@ class DDayFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentDDayBinding.inflate(inflater, container, false )
+        viewModel = ViewModelProvider(requireActivity()).get(DDayViewModel::class.java)
 
         val datingDay = MyApplication.prefs.getString("datingDay", "")
         getSpecialDDayInfo(datingDay)
@@ -136,9 +139,9 @@ class DDayFragment : Fragment() {
             // Set user defined adapter
             setAdapter(WpResidencePickerAdapter(specialDates))
 
-            scrollTo(getIndex(specialDates))
+            scrollTo(viewModel.getIndex(specialDates))
 
-            val index = getIndex(specialDates)
+            val index = viewModel.getIndex(specialDates)
             val dayText = specialDDayCheck[index].values.first()
 
             if (dayText > 99) {
@@ -164,27 +167,6 @@ class DDayFragment : Fragment() {
                 }
             })
         }
-    }
-
-    fun getIndex(specialDates: ArrayList<String>): Int {
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        val currentDate = Date()
-
-        var closestDateIndex = -1
-        var minDifference = Long.MAX_VALUE
-
-        for ((index, dateString) in specialDates.withIndex()) {
-            val date = dateFormat.parse(dateString)
-            if (date != null && date.after(currentDate)) {
-                val difference = date.time - currentDate.time
-                if (difference < minDifference) {
-                    closestDateIndex = index
-                    minDifference = difference
-                }
-            }
-        }
-
-        return closestDateIndex
     }
 
     companion object {

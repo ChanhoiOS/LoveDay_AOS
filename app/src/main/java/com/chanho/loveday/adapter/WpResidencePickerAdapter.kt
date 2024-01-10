@@ -5,13 +5,12 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-/** 지역 선택 Adapter */
+/** 기념일 날짜 선택 Adapter */
 class WpResidencePickerAdapter(var specialDates: ArrayList<String>) : WheelAdapter {
     //get item value based on item position in wheel
     override fun getValue(position: Int): String {
-
-        if(position < 0){
-            if((position + specialDates.size) == 0){
+        if(position < 0) {
+            if((position + specialDates.size) == 0) {
 
             }
             return specialDates[(position + specialDates.size)]
