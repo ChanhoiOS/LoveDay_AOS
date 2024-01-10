@@ -39,7 +39,6 @@ class MainActivity : AppCompatActivity() {
         if (!isSet) {
             val intent = Intent(this, SetDayActivity::class.java)
             startActivity(intent)
-            finish()
         }
     }
 

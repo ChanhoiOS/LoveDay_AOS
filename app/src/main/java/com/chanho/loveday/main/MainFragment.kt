@@ -20,6 +20,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.chanho.loveday.module.GlideApp
 import com.chanho.loveday.SettingActivity
 import com.chanho.loveday.application.MyApplication
@@ -33,17 +34,13 @@ import java.util.concurrent.TimeUnit
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [MainFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class MainFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
 
     private lateinit var binding: FragmentMainBinding
+    private lateinit var viewModel: MainViewModel
     var whoImage = "boy"
 
     private val MEDIA_PERMISSION_REQUEST_CODE = 123
@@ -58,6 +55,7 @@ class MainFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentMainBinding.inflate(inflater, container, false)
+        viewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
 
         eventProfileBtn()
         eventSettingBtn()
@@ -83,7 +81,7 @@ class MainFragment : Fragment() {
             val extractedMonth = parts[1].toInt()
             val extractedDay = parts[2].toInt()
 
-            var ingDay = getDDay(extractedYear, extractedMonth, extractedDay)
+            var ingDay = viewModel.getDDay(extractedYear, extractedMonth, extractedDay)
 
             binding.ingText.text = ingDay + "일째"
         }
@@ -253,30 +251,6 @@ class MainFragment : Fragment() {
         } else {
             //권한 비허용
         }
-    }
-
-    private fun getDDay(year: Int, month: Int, day: Int): String {
-        val selectedCalendar = Calendar.getInstance().apply {
-            set(Calendar.YEAR, year)
-            set(Calendar.MONTH, month - 1) // 0부터 시작하는 월을 반영하여 -1 해줍니다.
-            set(Calendar.DAY_OF_MONTH, day)
-            set(Calendar.HOUR_OF_DAY, 0)
-            set(Calendar.MINUTE, 0)
-            set(Calendar.SECOND, 0)
-            set(Calendar.MILLISECOND, 0)
-        }
-
-        val today = Calendar.getInstance().apply {
-            set(Calendar.HOUR_OF_DAY, 0)
-            set(Calendar.MINUTE, 0)
-            set(Calendar.SECOND, 0)
-            set(Calendar.MILLISECOND, 0)
-        }
-
-        val differenceInMillis = today.timeInMillis - selectedCalendar.timeInMillis
-        val differenceInDays = TimeUnit.MILLISECONDS.toDays(differenceInMillis) + 1
-
-        return differenceInDays.toString()
     }
 
     companion object {
