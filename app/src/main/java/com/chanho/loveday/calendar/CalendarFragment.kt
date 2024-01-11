@@ -6,14 +6,17 @@ import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.chanho.loveday.NetworkManager
 import com.chanho.loveday.application.MyApplication
+import com.chanho.loveday.calendar.CalendarViewModel
 import com.chanho.loveday.databinding.FragmentCalendarBinding
 import com.chanho.loveday.model.CalendarModel
 import com.prolificinteractive.materialcalendarview.*
@@ -34,6 +37,8 @@ private const val ARG_PARAM2 = "param2"
  */
 class CalendarFragment : Fragment() {
     private lateinit var binding: FragmentCalendarBinding
+    private lateinit var viewModel: CalendarViewModel
+
     private lateinit var loadingIndicator: View
     private var calendarModelData: List<CalendarModel>? = null
     private var editWriter = ""
@@ -45,9 +50,11 @@ class CalendarFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentCalendarBinding.inflate(inflater, container, false )
+        viewModel = ViewModelProvider(requireActivity()).get(CalendarViewModel::class.java)
 
         binding.calendarEditBtn.visibility = View.GONE
 
+        setObserver()
         setBtnEvent()
         setCalendarEvent()
         setData()
@@ -191,16 +198,60 @@ class CalendarFragment : Fragment() {
     }
 
     private fun fetchData(param: HashMap<String, Any>) {
-        NetworkManager.getCalendar(param) { data ->
-            if (data != null) {
-                calendarModelData = data
-                addSpecialDateDecorators(data)
+        viewModel.fetchData(param)
+    }
+
+    private fun setObserver() {
+        viewModel.calendarModelData.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            it?.let {
+                calendarModelData = it
+                addSpecialDateDecorators(it)
                 setCalendarContent()
-            } else {
-                // 데이터 가져오기 실패
             }
             loadingIndicator.visibility = View.GONE
-        }
+        })
+
+        viewModel.calendarRegisterSuccess.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            it?.let {
+                if (it) {
+                    setData()
+                    calenndarSendNoti("일정 등록")
+                } else {
+
+                }
+            }
+        })
+
+        viewModel.calendarUpdateSuccess.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            it?.let {
+                if (it) {
+                    setData()
+                    calenndarSendNoti("일정 수정")
+                } else {
+
+                }
+            }
+        })
+
+        viewModel.calendarDeleteSuccess.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            it?.let {
+                if (it) {
+                    setData()
+                } else {
+
+                }
+            }
+        })
+
+        viewModel.sendNotification.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            it?.let {
+                if (it) {
+                    Log.e("노티 발송 성공", it.toString())
+                } else {
+                    Log.e("노티 발송 실패", it.toString())
+                }
+            }
+        })
     }
 
     private fun setCalendarContent() {
@@ -337,30 +388,15 @@ class CalendarFragment : Fragment() {
     }
 
     private fun postCalendar(data: HashMap<String, Any>) {
-        NetworkManager.postCalendarRequest(data,
-            {
-                setData()
-                postNoti()
-            },
-            {
-                // 실패 처리 로직을 여기에 작성합니다.
-            })
+        viewModel.registerCalendar(data)
     }
 
     private fun deleteCalendar(data: HashMap<String, Any>) {
-        NetworkManager.deleteCalendar(data, {
-            setData()
-        }) {
-
-        }
+        viewModel.deleteCalendar(data)
     }
 
     private fun updateCalendar(data: HashMap<String, Any>) {
-        NetworkManager.updateCalendar(data, {
-            setData()
-        }) {
-
-        }
+        viewModel.updateCalendar(data)
     }
 
     private fun registerKey(partner: String) {
@@ -378,15 +414,13 @@ class CalendarFragment : Fragment() {
         }
     }
 
-    private fun postNoti() {
+    private fun calenndarSendNoti(type: String) {
         val partnerKey = MyApplication.prefs.getString("partnerKey", "")
         val param = HashMap<String, Any>()
         param["partner"] = partnerKey
-        NetworkManager.calendarNoti(param, {
+        param["type"] = type
 
-        }) {
-
-        }
+        viewModel.calenndarSendNoti(param)
     }
 
     companion object {

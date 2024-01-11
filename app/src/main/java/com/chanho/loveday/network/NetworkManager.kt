@@ -40,7 +40,7 @@ interface ApiService {
     @POST("api/user")
     fun signUp(@Body data: HashMap<String, Any>): Call<Void>
 
-    @POST("api/calendarNoti")
+    @POST("api/calendar/push")
     fun calendarNoti(@Body data: HashMap<String, Any>): Call<Void>
 
     @POST("api/memo/push")

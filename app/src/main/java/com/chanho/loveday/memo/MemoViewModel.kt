@@ -3,8 +3,6 @@ package com.chanho.loveday.memo
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.chanho.loveday.NetworkManager
-import com.chanho.loveday.R
-import com.chanho.loveday.application.MyApplication
 import com.chanho.loveday.model.MemoModel
 import java.util.HashMap
 
