@@ -252,6 +252,17 @@ class CalendarFragment : Fragment() {
                 }
             }
         })
+
+        viewModel.keyRegister.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            it?.let {
+                if (it) {
+                    setData()
+                    binding.calendarKeyButton.setImageResource(R.drawable.main_heart_middle)
+                } else {
+
+                }
+            }
+        })
     }
 
     private fun setCalendarContent() {
@@ -401,17 +412,14 @@ class CalendarFragment : Fragment() {
 
     private fun registerKey(partner: String) {
         val privateKey = MyApplication.prefs.getString("privateKey", "")
+        val token = MyApplication.prefs.getString("fcmToken", "")
 
         val param = HashMap<String, Any>()
         param["partner"] = partner
         param["writer"] = privateKey
+        param["token"] = token
 
-        NetworkManager.registerPartner(param, {
-            setData()
-            binding.calendarKeyButton.setImageResource(R.drawable.main_heart_middle)
-        }) {
-            println("키등록 실패")
-        }
+        viewModel.registerKey(param)
     }
 
     private fun calenndarSendNoti(type: String) {

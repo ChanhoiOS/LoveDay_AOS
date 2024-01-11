@@ -12,6 +12,7 @@ class CalendarViewModel: ViewModel() {
     var calendarUpdateSuccess = MutableLiveData<Boolean>()
     var calendarDeleteSuccess = MutableLiveData<Boolean>()
     var sendNotification = MutableLiveData<Boolean>()
+    var keyRegister = MutableLiveData<Boolean>()
 
     fun fetchData(param: HashMap<String, Any>) {
         NetworkManager.getCalendar(param) { data ->
@@ -45,6 +46,14 @@ class CalendarViewModel: ViewModel() {
             calendarDeleteSuccess.value = true
         }) {
             calendarDeleteSuccess.value = false
+        }
+    }
+
+    fun registerKey(param: HashMap<String, Any>) {
+        NetworkManager.registerPartner(param, {
+            keyRegister.value = true
+        }) {
+            keyRegister.value = false
         }
     }
 
