@@ -239,6 +239,7 @@ class CalendarFragment : Fragment() {
             it?.let {
                 if (it) {
                     setData()
+                    viewModel.calendarDeleteSuccess.value = false
                 } else {
 
                 }
