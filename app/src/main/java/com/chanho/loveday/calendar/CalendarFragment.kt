@@ -216,6 +216,7 @@ class CalendarFragment : Fragment() {
                 if (it) {
                     setData()
                     calenndarSendNoti("일정 등록")
+                    viewModel.calendarRegisterSuccess.value = false
                 } else {
 
                 }
@@ -227,6 +228,7 @@ class CalendarFragment : Fragment() {
                 if (it) {
                     setData()
                     calenndarSendNoti("일정 수정")
+                    viewModel.calendarUpdateSuccess.value = false
                 } else {
 
                 }

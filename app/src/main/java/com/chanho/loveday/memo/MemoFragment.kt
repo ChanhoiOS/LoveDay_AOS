@@ -140,6 +140,7 @@ class MemoFragment : Fragment(), MemoDataListener {
                 if (it) {
                     setData()
                     memoSendNoti("등록")
+                    viewModel.memoRegisterSuccess.value = false
                 } else {
 
                 }
@@ -151,6 +152,7 @@ class MemoFragment : Fragment(), MemoDataListener {
                 if (it) {
                     setData()
                     memoSendNoti("수정")
+                    viewModel.memoUpdateSuccess.value = false
                 } else {
 
                 }
@@ -161,6 +163,7 @@ class MemoFragment : Fragment(), MemoDataListener {
             it?.let {
                 if (it) {
                     setData()
+                    viewModel.memoDeleteSuccess.value = false
                 } else {
 
                 }
