@@ -139,7 +139,7 @@ class MemoFragment : Fragment(), MemoDataListener {
             it?.let {
                 if (it) {
                     setData()
-                    postNoti()
+                    memoSendNoti("등록")
                 } else {
 
                 }
@@ -150,7 +150,7 @@ class MemoFragment : Fragment(), MemoDataListener {
             it?.let {
                 if (it) {
                     setData()
-                    postNoti()
+                    memoSendNoti("수정")
                 } else {
 
                 }
@@ -161,9 +161,29 @@ class MemoFragment : Fragment(), MemoDataListener {
             it?.let {
                 if (it) {
                     setData()
-                    postNoti()
                 } else {
 
+                }
+            }
+        })
+
+        viewModel.keyRegister.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                if (it) {
+                    setData()
+                    binding.memoKeyButton.setImageResource(R.drawable.main_heart_middle)
+                } else {
+
+                }
+            }
+        })
+
+        viewModel.sendNotification.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                if (it) {
+                    Log.e("노티 발송 성공", it.toString())
+                } else {
+                    Log.e("노티 발송 실패", it.toString())
                 }
             }
         })
@@ -261,23 +281,17 @@ class MemoFragment : Fragment(), MemoDataListener {
         param["writer"] = privateKey
         param["token"] = token
 
-        NetworkManager.registerPartner(param, {
-            setData()
-            binding.memoKeyButton.setImageResource(R.drawable.main_heart_middle)
-        }) {
-            println("키등록 실패")
-        }
+        viewModel.registerKey(param)
     }
 
-    private fun postNoti() {
+    private fun memoSendNoti(type: String) {
         val partnerKey = MyApplication.prefs.getString("partnerKey", "")
         val param = HashMap<String, Any>()
+
         param["partner"] = partnerKey
-        NetworkManager.memoNoti(param, {
+        param["type"] = type
 
-        }) {
-
-        }
+        viewModel.memoSendNoti(param)
     }
 
     companion object {

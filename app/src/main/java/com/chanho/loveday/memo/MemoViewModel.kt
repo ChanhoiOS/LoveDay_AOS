@@ -3,6 +3,8 @@ package com.chanho.loveday.memo
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.chanho.loveday.NetworkManager
+import com.chanho.loveday.R
+import com.chanho.loveday.application.MyApplication
 import com.chanho.loveday.model.MemoModel
 import java.util.HashMap
 
@@ -12,6 +14,8 @@ class MemoViewModel: ViewModel() {
     var memoRegisterSuccess = MutableLiveData<Boolean>()
     var memoUpdateSuccess = MutableLiveData<Boolean>()
     var memoDeleteSuccess = MutableLiveData<Boolean>()
+    var keyRegister = MutableLiveData<Boolean>()
+    var sendNotification = MutableLiveData<Boolean>()
 
     fun fetchData(param: HashMap<String, Any>) {
         NetworkManager.getMemo(param) { data ->
@@ -46,5 +50,21 @@ class MemoViewModel: ViewModel() {
         }, {
             memoDeleteSuccess.value = false
         })
+    }
+
+    fun registerKey(param: HashMap<String, Any>) {
+        NetworkManager.registerPartner(param, {
+            keyRegister.value = true
+        }) {
+            keyRegister.value = false
+        }
+    }
+
+    fun memoSendNoti(param: HashMap<String, Any>) {
+        NetworkManager.memoNoti(param, {
+            sendNotification.value = true
+        }) {
+            sendNotification.value = false
+        }
     }
 }

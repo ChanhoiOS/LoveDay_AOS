@@ -43,7 +43,7 @@ interface ApiService {
     @POST("api/calendarNoti")
     fun calendarNoti(@Body data: HashMap<String, Any>): Call<Void>
 
-    @POST("api/memoNoti")
+    @POST("api/memo/push")
     fun memoNoti(@Body data: HashMap<String, Any>): Call<Void>
 }
 
@@ -262,10 +262,8 @@ object NetworkManager {
         apiService.memoNoti(data).enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if (response.isSuccessful) {
-                    println("Key Success")
                     success()
                 } else {
-                    println("Key Fail")
                     failure()
                 }
             }
