@@ -3,12 +3,15 @@ package com.chanho.loveday.memo
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.chanho.loveday.MemoDataListener
 import com.chanho.loveday.MemoWriteFragment
 import com.chanho.loveday.NetworkManager
@@ -17,6 +20,7 @@ import com.chanho.loveday.adapter.GridSpacingItemDecoration
 import com.chanho.loveday.adapter.MemoItemAdapter
 import com.chanho.loveday.application.MyApplication
 import com.chanho.loveday.databinding.FragmentMemoBinding
+import com.chanho.loveday.dday.DDayViewModel
 import com.chanho.loveday.model.MemoModel
 import java.util.HashMap
 
@@ -32,7 +36,7 @@ private const val ARG_PARAM2 = "param2"
  */
 class MemoFragment : Fragment(), MemoDataListener {
     private lateinit var binding: FragmentMemoBinding
-    private var memoModelData: List<MemoModel>? = null
+    private lateinit var viewModel: MemoViewModel
     lateinit var adapter: MemoItemAdapter
 
     private val spanCount = 2 // 열의 개수
@@ -48,7 +52,9 @@ class MemoFragment : Fragment(), MemoDataListener {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMemoBinding.inflate(inflater, container, false )
+        viewModel = ViewModelProvider(requireActivity()).get(MemoViewModel::class.java)
 
+        setObserver()
         setRecyclerView()
         setData()
         swipeRefresh()
@@ -118,18 +124,16 @@ class MemoFragment : Fragment(), MemoDataListener {
     }
 
     private fun fetchData(param: HashMap<String, Any>) {
-        NetworkManager.getMemo(param) { data ->
-            if (data != null) {
-                var sortedData = data.sortedByDescending { it.id ?: Int.MIN_VALUE }
-                memoModelData = sortedData
-                memoModelData?.let {
-                    adapter = MemoItemAdapter(this, memoModelData)
-                    binding.memoRecyclerView.adapter = adapter
-                }
-            } else {
-                // 데이터 가져오기 실패
+        viewModel.fetchData(param)
+    }
+
+    private fun setObserver() {
+        viewModel.memoModelData.observe(requireActivity(), Observer {
+            it?.let {
+                adapter = MemoItemAdapter(this, it)
+                binding.memoRecyclerView.adapter = adapter
             }
-        }
+        })
     }
 
     override fun onMemoDataEntered(isEdit: Boolean, id: Int, title: String, content: String) {
