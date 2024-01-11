@@ -1,6 +1,5 @@
 package com.chanho.loveday.memo
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.chanho.loveday.NetworkManager
@@ -10,17 +9,42 @@ import java.util.HashMap
 class MemoViewModel: ViewModel() {
 
     var memoModelData = MutableLiveData<List<MemoModel>>()
+    var memoRegisterSuccess = MutableLiveData<Boolean>()
+    var memoUpdateSuccess = MutableLiveData<Boolean>()
+    var memoDeleteSuccess = MutableLiveData<Boolean>()
 
     fun fetchData(param: HashMap<String, Any>) {
         NetworkManager.getMemo(param) { data ->
             if (data != null) {
                 var sortedData = data.sortedByDescending { it.id ?: Int.MIN_VALUE }
-                Log.e("sort: ", sortedData.toString())
                 memoModelData.value = sortedData
-                Log.e("value: ", memoModelData.value.toString())
             } else {
                 // 데이터 가져오기 실패
             }
         }
+    }
+
+    fun registerMemo(data: HashMap<String, Any>) {
+        NetworkManager.postMemoRequest(data, {
+            memoRegisterSuccess.value = true
+        }, {
+            memoRegisterSuccess.value = false
+        })
+    }
+
+    fun updateMemo(data: HashMap<String, Any>) {
+        NetworkManager.updateMemo(data, {
+            memoUpdateSuccess.value = true
+        }, {
+            memoUpdateSuccess.value = false
+        })
+    }
+
+    fun deleteMemo(data: HashMap<String, Any>) {
+        NetworkManager.deleteMemo(data, {
+            memoDeleteSuccess.value = true
+        }, {
+            memoDeleteSuccess.value = false
+        })
     }
 }

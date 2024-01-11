@@ -128,10 +128,43 @@ class MemoFragment : Fragment(), MemoDataListener {
     }
 
     private fun setObserver() {
-        viewModel.memoModelData.observe(requireActivity(), Observer {
+        viewModel.memoModelData.observe(viewLifecycleOwner, Observer {
             it?.let {
                 adapter = MemoItemAdapter(this, it)
                 binding.memoRecyclerView.adapter = adapter
+            }
+        })
+
+        viewModel.memoRegisterSuccess.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                if (it) {
+                    setData()
+                    postNoti()
+                } else {
+
+                }
+            }
+        })
+
+        viewModel.memoUpdateSuccess.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                if (it) {
+                    setData()
+                    postNoti()
+                } else {
+
+                }
+            }
+        })
+
+        viewModel.memoDeleteSuccess.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                if (it) {
+                    setData()
+                    postNoti()
+                } else {
+
+                }
             }
         })
     }
@@ -155,28 +188,15 @@ class MemoFragment : Fragment(), MemoDataListener {
     }
 
     private fun registerMemo(data: HashMap<String, Any>) {
-        NetworkManager.postMemoRequest(data, {
-            setData()
-            postNoti()
-        }, {
-
-        })
-    }
-
-    private fun deleteMemo(data: HashMap<String, Any>) {
-        NetworkManager.deleteMemo(data, {
-            setData()
-        }, {
-
-        })
+        viewModel.registerMemo(data)
     }
 
     private fun updateMemo(data: HashMap<String, Any>) {
-        NetworkManager.updateMemo(data, {
-            setData()
-        }, {
+        viewModel.updateMemo(data)
+    }
 
-        })
+    private fun deleteMemo(data: HashMap<String, Any>) {
+        viewModel.deleteMemo(data)
     }
 
     fun moreAction(data: Map<String, Any>) {
