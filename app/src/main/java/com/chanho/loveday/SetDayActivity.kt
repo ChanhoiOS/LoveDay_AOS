@@ -62,6 +62,7 @@ class SetDayActivity : AppCompatActivity() {
         val param = HashMap<String, Any>()
         param["writer"] = getKey
         param["token"] = token
+        param["os"] = "Android"
 
         NetworkManager.signUp(param, {
             setSpecialDay()

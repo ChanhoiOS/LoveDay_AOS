@@ -1,5 +1,6 @@
 package com.chanho.loveday
 
+import android.util.Log
 import com.chanho.loveday.model.CalendarModel
 import com.chanho.loveday.model.MemoModel
 import retrofit2.Call
@@ -45,6 +46,9 @@ interface ApiService {
 
     @POST("api/memo/push")
     fun memoNoti(@Body data: HashMap<String, Any>): Call<Void>
+
+    @POST("api/user/history")
+    fun accessHistory(@Body data: HashMap<String, Any>): Call<Void>
 }
 
 object NetworkManager {
@@ -228,6 +232,25 @@ object NetworkManager {
                     success()
                 } else {
                     println("Key Fail")
+                    failure()
+                }
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                println("Network Error: ${t.message}")
+                failure()
+            }
+        })
+    }
+
+    fun accessHistory(data: HashMap<String, Any>, success: () -> Unit, failure: () -> Unit) {
+        apiService.accessHistory(data).enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                if (response.isSuccessful) {
+                    Log.d("access history record success" , response.toString())
+                    success()
+                } else {
+                    Log.d("access history record fail" , response.toString())
                     failure()
                 }
             }

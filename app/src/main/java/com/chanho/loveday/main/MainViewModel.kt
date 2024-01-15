@@ -1,6 +1,7 @@
 package com.chanho.loveday.main
 
 import androidx.lifecycle.ViewModel
+import com.chanho.loveday.NetworkManager
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -28,5 +29,14 @@ class MainViewModel: ViewModel() {
         val differenceInDays = TimeUnit.MILLISECONDS.toDays(differenceInMillis) + 1
 
         return differenceInDays.toString()
+    }
+
+    fun accessHistory(data: HashMap<String, Any>) {
+        NetworkManager.accessHistory(data, {
+
+        }) {
+
+        }
+
     }
 }

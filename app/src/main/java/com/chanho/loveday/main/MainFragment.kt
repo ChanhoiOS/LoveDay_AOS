@@ -26,6 +26,7 @@ import com.chanho.loveday.SettingActivity
 import com.chanho.loveday.application.MyApplication
 import com.chanho.loveday.databinding.FragmentMainBinding
 import com.theartofdev.edmodo.cropper.CropImage
+import java.time.LocalDateTime
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -61,6 +62,7 @@ class MainFragment : Fragment() {
         eventSettingBtn()
         setProfile()
         checkAppPushNotification()
+        accessHistory()
 
         return binding.root
     }
@@ -84,6 +86,23 @@ class MainFragment : Fragment() {
             var ingDay = viewModel.getDDay(extractedYear, extractedMonth, extractedDay)
 
             binding.ingText.text = ingDay + "일째"
+        }
+    }
+
+    private fun accessHistory() {
+        val isSet = MyApplication.prefs.getBoolean("isSet", false)
+
+        if (isSet) {
+            val privateKey = MyApplication.prefs.getString("privateKey", "")
+            val localDateTime: LocalDateTime = LocalDateTime.now()
+            val dateStr = localDateTime.toLocalDate().toString()
+
+            val param = HashMap<String, Any>()
+
+            param["writer"] = privateKey
+            param["accessTime"] = dateStr
+
+            viewModel.accessHistory(param)
         }
     }
 
